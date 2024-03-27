@@ -2,7 +2,14 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [$default-branch]
+    branches:
+      - main
+    paths:
+      - .github/workflows/deploy.yml
+      - src/**
+      - index.html
+      - package*.json
+      - vite.config.js
 
   workflow_dispatch:
 
