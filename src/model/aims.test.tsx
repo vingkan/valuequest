@@ -71,8 +71,10 @@ test('calculate pmpm in cents', () => {
         memberRateLowRisk: 0.25,
         memberRateMediumRisk: 0.25,
         memberRateHighRisk: 0.5,
-        utilizationPerMemberPerYearInpatientMediumRisk: 1.5,
-        utilizationPerMemberPerYearInpatientHighRisk: 10,
+        utilizationPerMemberPerYearInpatient: 1,
+        utilizationFactorLowRisk: 0,
+        utilizationFactorMediumRisk: 1.5,
+        utilizationFactorHighRisk: 10,
         providerDesiredCentsPerUtilizationInpatient: 400,
     })
     // 50 high risk members * 10 IP utils * $4 per util = $2000
@@ -87,8 +89,8 @@ test('no members, no pmpm', () => {
         memberRateLowRisk: 0.25,
         memberRateMediumRisk: 0.25,
         memberRateHighRisk: 0.5,
-        utilizationPerMemberPerYearInpatientMediumRisk: 1.5,
-        utilizationPerMemberPerYearInpatientHighRisk: 10,
+        utilizationPerMemberPerYearInpatient: 1,
+        utilizationFactorHighRisk: 1.5,
         providerDesiredCentsPerUtilizationInpatient: 400,
     })
     expect(actual).toBe(0)

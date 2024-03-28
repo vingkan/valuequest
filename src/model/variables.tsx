@@ -7,21 +7,14 @@ export type Variables = {
     qualityOfLifeLowRisk: number
     qualityOfLifeMediumRisk: number
     qualityOfLifeHighRisk: number
-    utilizationPerMemberPerYearInpatientLowRisk: number
-    utilizationPerMemberPerYearOutpatientLowRisk: number
-    utilizationPerMemberPerYearPrimaryLowRisk: number
-    utilizationPerMemberPerYearSpecialtyLowRisk: number
-    utilizationPerMemberPerYearDrugsLowRisk: number
-    utilizationPerMemberPerYearInpatientMediumRisk: number
-    utilizationPerMemberPerYearOutpatientMediumRisk: number
-    utilizationPerMemberPerYearPrimaryMediumRisk: number
-    utilizationPerMemberPerYearSpecialtyMediumRisk: number
-    utilizationPerMemberPerYearDrugsMediumRisk: number
-    utilizationPerMemberPerYearInpatientHighRisk: number
-    utilizationPerMemberPerYearOutpatientHighRisk: number
-    utilizationPerMemberPerYearPrimaryHighRisk: number
-    utilizationPerMemberPerYearSpecialtyHighRisk: number
-    utilizationPerMemberPerYearDrugsHighRisk: number
+    utilizationPerMemberPerYearInpatient: number
+    utilizationPerMemberPerYearOutpatient: number
+    utilizationPerMemberPerYearPrimary: number
+    utilizationPerMemberPerYearSpecialty: number
+    utilizationPerMemberPerYearDrugs: number
+    utilizationFactorLowRisk: number
+    utilizationFactorMediumRisk: number
+    utilizationFactorHighRisk: number
     providerDesiredCentsPerUtilizationInpatient: number
     providerDesiredCentsPerUtilizationOutpatient: number
     providerDesiredCentsPerUtilizationPrimary: number

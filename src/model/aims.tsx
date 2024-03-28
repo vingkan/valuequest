@@ -60,12 +60,15 @@ export function getCentsPerMemberPerMonth(vars: Partial<Variables>): number {
     for (const category of SERVICE_CATEGORIES) {
         for (const level of RISK_LEVELS) {
             const rateName = `memberRate${level}`
-            const utilName = `utilizationPerMemberPerYear${category}${level}`
+            const utilBaseName = `utilizationPerMemberPerYear${category}`
+            const utilFactorName = `utilizationFactor${level}`
             const costName = `providerDesiredCentsPerUtilization${category}`
             const rate = vars?.[rateName] || 0
-            const util = vars?.[utilName] || 0
+            const utilBase = vars?.[utilBaseName] || 0
+            const utilFactor = vars?.[utilFactorName] || 0
             const cost = vars?.[costName] || 0
             const members = memberCount * rate
+            const util = utilBase * utilFactor
             const centsPerSegment = cost * util * members
             totalCents += centsPerSegment
         }
