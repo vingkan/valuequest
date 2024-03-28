@@ -6,28 +6,30 @@ import {
     getQualityOfLifeGiniIndex,
 } from './aims'
 import { getDesiredReimbursementCents } from './cost'
+import { Inputs, Outputs, Variables } from './variables'
 
-export function simulate(vars: Variables): Variables {
-    const desiredReimbursementCents = getDesiredReimbursementCents(vars)
+export function simulate(inputs: Inputs): Variables {
+    const desiredReimbursementCents = getDesiredReimbursementCents(inputs)
 
-    const memberSatisfaction = getMemberSatisfaction(vars)
-    const qualityOfLife = getQualityOfLife(vars)
+    const memberSatisfaction = getMemberSatisfaction(inputs)
+    const qualityOfLife = getQualityOfLife(inputs)
     const centsPerMemberPerMonth = getCentsPerMemberPerMonth({
-        ...vars,
+        ...inputs,
         desiredReimbursementCents,
     })
     const providerSatisfaction = getProviderSatisfaction({
-        ...vars,
+        ...inputs,
         desiredReimbursementCents,
     })
-    const qualityOfLifeGiniIndex = getQualityOfLifeGiniIndex(vars)
-    const output = {
-        ...vars,
+    const qualityOfLifeGiniIndex = getQualityOfLifeGiniIndex(inputs)
+    const outputs: Outputs = {
+        desiredReimbursementCents,
         memberSatisfaction,
         qualityOfLife,
         centsPerMemberPerMonth,
         providerSatisfaction,
         qualityOfLifeGiniIndex,
     }
-    return output
+    const results =  {...inputs, ...outputs }
+    return results
 }

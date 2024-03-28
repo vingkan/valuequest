@@ -39,14 +39,9 @@ test('simulate model', () => {
         patientsPerProvider: 0,
         providerAutonomyFactor: 1,
         providerReportingBurden: 0,
-        desiredReimbursementCents: 0,
         actualReimbursementCents: 240000,
-        memberSatisfaction: 0,
-        qualityOfLife: 0,
-        centsPerMemberPerMonth: 0,
-        providerSatisfaction: 0,
-        qualityOfLifeGiniIndex: 0,
     })
+    expect(actual.desiredReimbursementCents).toBe(240000)
     // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall
     expect(actual.memberSatisfaction).toBe(0.75)
     // Actual reimbursement matches desired and other factors are perfect

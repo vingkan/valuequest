@@ -1,4 +1,4 @@
-export type Variables = {
+export type Inputs = {
     // Cost and Utilization Factors
     memberCount: number
     memberRateLowRisk: number
@@ -41,8 +41,12 @@ export type Variables = {
     providerAutonomyFactor: number
     providerReportingBurden: number
     // Payment Model Factors
-    desiredReimbursementCents: number
     actualReimbursementCents: number
+}
+
+export type Outputs = {
+    // Payment Model Factors
+    desiredReimbursementCents: number
     // Quintuple Aim Outputs
     // Member Experience = Member Satisfaction Score (0-1)
     memberSatisfaction: number
@@ -55,3 +59,5 @@ export type Variables = {
     // Health Equity = Gini Index of Quality of Life Score (0-1)
     qualityOfLifeGiniIndex: number
 }
+
+export type Variables = Inputs & Outputs
