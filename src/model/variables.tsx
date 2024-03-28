@@ -1,5 +1,5 @@
 export type Variables = {
-    // Model Factors
+    // Cost and Utilization Factors
     memberCount: number
     memberRateLowRisk: number
     memberRateMediumRisk: number
@@ -20,6 +20,22 @@ export type Variables = {
     providerDesiredCentsPerUtilizationPrimary: number
     providerDesiredCentsPerUtilizationSpecialty: number
     providerDesiredCentsPerUtilizationDrugs: number
+    // Quality Factors
+    // Higher is Better
+    careAccessibilityFactor: number
+    providerTrustFactor: number
+    primaryCareParticipationRate: number
+    preventionRate: number
+    conditionsManagedRate: number
+    wellManagedRate: number
+    careGapClosureRate: number
+    medicationAdheranceRate: number
+    genericPrescriptionRate: number
+    providerEfficiencyFactor: number
+    // Lower is Better
+    costAversionFactor: number
+    lengthOfStay: number
+    readmissionRate: number
     // Quintuple Aim Outputs
     // Member Experience = Member Satisfaction Score (0-1)
     memberSatisfaction: number

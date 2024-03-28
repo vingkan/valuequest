@@ -7,9 +7,33 @@ import {
     getCentsPerMemberPerMonth,
 } from './aims'
 
-test('calculate member satisfaction', () => {
+test('calculate default perfect member satisfaction', () => {
     const actual = getMemberSatisfaction({})
     expect(actual).toBe(1)
+})
+
+test('calculate half possible member satisfaction', () => {
+    const actual = getMemberSatisfaction({
+        careAccessibilityFactor: 0.5,
+        providerTrustFactor: 0.5,
+        conditionsManagedRate: 0.5,
+        wellManagedRate: 0.5,
+        costAversionFactor: 0.5,
+        readmissionRate: 0.5,
+    })
+    expect(actual).toBe(0.5)
+})
+
+test('calculate worst possible member satisfaction', () => {
+    const actual = getMemberSatisfaction({
+        careAccessibilityFactor: 0,
+        providerTrustFactor: 0,
+        conditionsManagedRate: 0,
+        wellManagedRate: 0,
+        costAversionFactor: 1,
+        readmissionRate: 1,
+    })
+    expect(actual).toBe(0)
 })
 
 test('calculate provider satisfaction', () => {

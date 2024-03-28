@@ -23,13 +23,27 @@ test('simulate model', () => {
         providerDesiredCentsPerUtilizationPrimary: 0,
         providerDesiredCentsPerUtilizationSpecialty: 0,
         providerDesiredCentsPerUtilizationDrugs: 0,
+        careAccessibilityFactor: 0.5,
+        providerTrustFactor: 0.5,
+        primaryCareParticipationRate: 1,
+        preventionRate: 1,
+        conditionsManagedRate: 0.5,
+        wellManagedRate: 1,
+        careGapClosureRate: 1,
+        medicationAdheranceRate: 1,
+        genericPrescriptionRate: 1,
+        providerEfficiencyFactor: 1,
+        costAversionFactor: 0,
+        lengthOfStay: 1,
+        readmissionRate: 0,
         memberSatisfaction: 0,
         qualityOfLife: 0,
         centsPerMemberPerMonth: 0,
         providerSatisfaction: 0,
         qualityOfLifeGiniIndex: 0,
     })
-    expect(actual.memberSatisfaction).toBe(1)
+    // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall
+    expect(actual.memberSatisfaction).toBe(0.75)
     expect(actual.providerSatisfaction).toBe(1)
     // 2 high risk members * 1 IP util * $1200 cost per util = $2400
     // $2400 / 10 members = $240 / 12 months = $20 pmpm
