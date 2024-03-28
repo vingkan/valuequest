@@ -1,8 +1,11 @@
 import { expect, test } from 'vitest'
-import { getDesiredReimbursementCents } from './cost'
+import {
+    getCostCentsByCategory,
+    getDesiredReimbursementCents,
+} from './cost'
 
-test('calculate total desired cost in cents', () => {
-    const actual = getDesiredReimbursementCents({
+test('calculate cost by category in cents', () => {
+    const actual = getCostCentsByCategory({
         memberCount: 100,
         memberRateLowRisk: 0.25,
         memberRateMediumRisk: 0.25,
@@ -16,17 +19,22 @@ test('calculate total desired cost in cents', () => {
     // 50 high risk members * 10 IP utils * $4 per util = $2000
     // 25 medium risk members * 1.5 IP utils * $4 per util = $150
     // 25 low risk members * 0 IP utils * $4 per util = $0
-    expect(actual).toBe(215000)
+    expect(actual).toStrictEqual({
+        costCentsInpatient: 215000,
+        costCentsOutpatient: 0,
+        costCentsPrimary: 0,
+        costCentsSpecialty: 0,
+        costCentsDrugs: 0,
+    })
 })
 
-test('no members, no cost', () => {
+test('calculate total desired cost in cents', () => {
     const actual = getDesiredReimbursementCents({
-        memberRateLowRisk: 0.25,
-        memberRateMediumRisk: 0.25,
-        memberRateHighRisk: 0.5,
-        utilizationPerMemberPerYearInpatient: 1,
-        utilizationFactorHighRisk: 1.5,
-        providerDesiredCentsPerUtilizationInpatient: 400,
+        costCentsInpatient: 200000,
+        costCentsOutpatient: 0,
+        costCentsPrimary: 0,
+        costCentsSpecialty: 0,
+        costCentsDrugs: 10000,
     })
-    expect(actual).toBe(0)
+    expect(actual).toBe(210000)
 })

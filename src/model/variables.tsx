@@ -45,6 +45,12 @@ export type Inputs = {
 }
 
 export type Outputs = {
+    // Costs
+    costCentsInpatient: number
+    costCentsOutpatient: number
+    costCentsPrimary: number
+    costCentsSpecialty: number
+    costCentsDrugs: number
     // Payment Model Factors
     desiredReimbursementCents: number
     // Quintuple Aim Outputs

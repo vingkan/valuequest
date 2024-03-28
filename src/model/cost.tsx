@@ -1,4 +1,12 @@
-import { Variables } from './variables'
+import { Outputs, Variables } from './variables'
+
+type CostByCategory = {
+    costCentsInpatient: number
+    costCentsOutpatient: number
+    costCentsPrimary: number
+    costCentsSpecialty: number
+    costCentsDrugs: number
+}
 
 const RISK_LEVELS = [
     'LowRisk',
@@ -13,11 +21,19 @@ const SERVICE_CATEGORIES = [
     'Drugs',
 ]
 
-export function getDesiredReimbursementCents(vars: Partial<Variables>): number {
+export function getCostCentsByCategory(
+    vars: Partial<Variables>
+): CostByCategory {
     const { memberCount } = vars
-    if (!memberCount) return 0
+    let costCentsByCategory: CostByCategory = {
+        costCentsInpatient: 0,
+        costCentsOutpatient: 0,
+        costCentsPrimary: 0,
+        costCentsSpecialty: 0,
+        costCentsDrugs: 0,
+    }
+    if (!memberCount) return costCentsByCategory
 
-    let totalCents = 0
     for (const category of SERVICE_CATEGORIES) {
         for (const level of RISK_LEVELS) {
             const rateName = `memberRate${level}`
@@ -31,8 +47,20 @@ export function getDesiredReimbursementCents(vars: Partial<Variables>): number {
             const members = memberCount * rate
             const util = utilBase * utilFactor
             const centsPerSegment = cost * util * members
-            totalCents += centsPerSegment
+
+            const outputName = `costCents${category}`
+            costCentsByCategory[outputName] += centsPerSegment
         }
+    }
+    return costCentsByCategory
+}
+
+export function getDesiredReimbursementCents(vars: Partial<Variables>): number {
+    let totalCents = 0
+    for (const category of SERVICE_CATEGORIES) {
+        const outputName = `costCents${category}`
+        const centsPerSegment = vars?.[outputName] || 0
+        totalCents += centsPerSegment
     }
     return totalCents
 }
