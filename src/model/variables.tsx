@@ -40,8 +40,6 @@ export type Inputs = {
     patientsPerProvider: number
     providerAutonomyFactor: number
     providerReportingBurden: number
-    // Payment Model Factors
-    actualReimbursementCents: number
 }
 
 export type Outputs = {
@@ -53,6 +51,7 @@ export type Outputs = {
     costCentsDrugs: number
     // Payment Model Factors
     desiredReimbursementCents: number
+    actualReimbursementCents: number
     // Quintuple Aim Outputs
     // Member Experience = Member Satisfaction Score (0-1)
     memberSatisfaction: number

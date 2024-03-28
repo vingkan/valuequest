@@ -1,4 +1,4 @@
-import { Outputs, Variables } from './variables'
+import { Variables } from './variables'
 
 type CostByCategory = {
     costCentsInpatient: number
