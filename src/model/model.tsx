@@ -1,7 +1,24 @@
-/*
- * Member Experience = Member Satisfaction Score (0-1)
- * Health Outcomes = Quality of Life Score (0-1)
- * Cost of Healthcare = Average Cost Per Member Per Month ($)
- * Provider Experience = Provider Satisfaction Score (0-1)
- * Health Equity = Gini Index of Quality of Life Score (0-1)
- */
+import {
+    getMemberSatisfaction,
+    getQualityOfLife,
+    getCentsPerMemberPerMonth,
+    getProviderSatisfaction,
+    getQualityOfLifeGiniIndex,
+} from './aims'
+
+export function simulate(vars: Variables): Variables {
+    const memberSatisfaction = getMemberSatisfaction(vars)
+    const qualityOfLife = getQualityOfLife(vars)
+    const centsPerMemberPerMonth = getCentsPerMemberPerMonth(vars)
+    const providerSatisfaction = getProviderSatisfaction(vars)
+    const qualityOfLifeGiniIndex = getQualityOfLifeGiniIndex(vars)
+    const output = {
+        ...vars,
+        memberSatisfaction,
+        qualityOfLife,
+        centsPerMemberPerMonth,
+        providerSatisfaction,
+        qualityOfLifeGiniIndex,
+    }
+    return output
+}

@@ -1,15 +1,13 @@
-name: Deploy
+name: Test
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/deploy.yml
+      - .github/workflows/test.yml
       - src/**
-      - index.html
       - package*.json
-      - vite.config.js
 
   workflow_dispatch:
 
@@ -33,28 +31,10 @@ jobs:
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Install Dependencies
         run: npm install
-      - name: Build Static Site
-        run: |
-          npm run build
-          touch valuequest/.nojekyll
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./valuequest
 
-  deploy:
+  test:
     needs: build
-
-    permissions:
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Run Unit Tests
+        run: npm run test
