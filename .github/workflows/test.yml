@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,10 +31,5 @@ jobs:
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Install Dependencies
         run: npm install
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Run Unit Tests
         run: npm run test
