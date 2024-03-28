@@ -36,6 +36,13 @@ export type Variables = {
     costAversionFactor: number
     lengthOfStay: number
     readmissionRate: number
+    // Provider Factors
+    patientsPerProvider: number
+    providerAutonomyFactor: number
+    providerReportingBurden: number
+    // Payment Model Factors
+    desiredReimbursementCents: number
+    actualReimbursementCents: number
     // Quintuple Aim Outputs
     // Member Experience = Member Satisfaction Score (0-1)
     memberSatisfaction: number

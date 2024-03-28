@@ -36,6 +36,11 @@ test('simulate model', () => {
         costAversionFactor: 0,
         lengthOfStay: 1,
         readmissionRate: 0,
+        patientsPerProvider: 0,
+        providerAutonomyFactor: 1,
+        providerReportingBurden: 0,
+        desiredReimbursementCents: 0,
+        actualReimbursementCents: 240000,
         memberSatisfaction: 0,
         qualityOfLife: 0,
         centsPerMemberPerMonth: 0,
@@ -44,6 +49,7 @@ test('simulate model', () => {
     })
     // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall
     expect(actual.memberSatisfaction).toBe(0.75)
+    // Actual reimbursement matches desired and other factors are perfect
     expect(actual.providerSatisfaction).toBe(1)
     // 2 high risk members * 1 IP util * $1200 cost per util = $2400
     // $2400 / 10 members = $240 / 12 months = $20 pmpm

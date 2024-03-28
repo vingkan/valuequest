@@ -36,9 +36,42 @@ test('calculate worst possible member satisfaction', () => {
     expect(actual).toBe(0)
 })
 
-test('calculate provider satisfaction', () => {
+test('calculate default worst possible provider satisfaction', () => {
     const actual = getProviderSatisfaction({})
+    expect(actual).toBe(0)
+})
+
+test('calculate best possible provider satisfaction', () => {
+    const actual = getProviderSatisfaction({
+        providerAutonomyFactor: 1,
+        providerReportingBurden: 0,
+        desiredReimbursementCents: 100000,
+        actualReimbursementCents: 100000,
+    })
     expect(actual).toBe(1)
+})
+
+test('calculate worst possible provider satisfaction', () => {
+    const actual = getProviderSatisfaction({
+        providerAutonomyFactor: 0,
+        providerReportingBurden: 1,
+        desiredReimbursementCents: 100000,
+        actualReimbursementCents: 0,
+    })
+    expect(actual).toBe(0)
+})
+
+test('calculate underpaid provider satisfaction', () => {
+    const actual = getProviderSatisfaction({
+        providerAutonomyFactor: 1,
+        providerReportingBurden: 0,
+        desiredReimbursementCents: 100000,
+        actualReimbursementCents: 0,
+    })
+    // Payment ratio is weighted to half of overall satisfaction, so being
+    // perfect on the other factors, but having a payment ratio of zero leads to
+    // an overall half satisfaction score
+    expect(actual).toBe(0.5)
 })
 
 test('calculate average quality of life', () => {
@@ -91,31 +124,23 @@ test('calculate gini index of quality of life for perfect inequality', () => {
 
 test('calculate pmpm in cents', () => {
     const actual = getCentsPerMemberPerMonth({
-        memberCount: 100,
-        memberRateLowRisk: 0.25,
-        memberRateMediumRisk: 0.25,
-        memberRateHighRisk: 0.5,
-        utilizationPerMemberPerYearInpatient: 1,
-        utilizationFactorLowRisk: 0,
-        utilizationFactorMediumRisk: 1.5,
-        utilizationFactorHighRisk: 10,
-        providerDesiredCentsPerUtilizationInpatient: 400,
+        memberCount: 10,
+        desiredReimbursementCents: 2400,
     })
-    // 50 high risk members * 10 IP utils * $4 per util = $2000
-    // 25 medium risk members * 1.5 IP utils * $4 per util = $150
-    // 25 low risk members * 0 IP utils * $4 per util = $0
-    // $2150 / 100 = $21.50 / 12 = $1.79166667 = $1.79
-    expect(actual).toBe(179)
+    // 2400 / 10 = 240 / 12 = 20
+    expect(actual).toBe(20)
 })
 
 test('no members, no pmpm', () => {
     const actual = getCentsPerMemberPerMonth({
-        memberRateLowRisk: 0.25,
-        memberRateMediumRisk: 0.25,
-        memberRateHighRisk: 0.5,
-        utilizationPerMemberPerYearInpatient: 1,
-        utilizationFactorHighRisk: 1.5,
-        providerDesiredCentsPerUtilizationInpatient: 400,
+        desiredReimbursementCents: 2400,
+    })
+    expect(actual).toBe(0)
+})
+
+test('no cost, no pmpm', () => {
+    const actual = getCentsPerMemberPerMonth({
+        memberCount: 10,
     })
     expect(actual).toBe(0)
 })

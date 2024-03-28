@@ -2,29 +2,12 @@ import { getGiniIndex } from './gini'
 import { Variables } from './variables'
 
 const MONTHS_PER_YEAR = 12
-const RISK_LEVELS = [
-    'LowRisk',
-    'MediumRisk',
-    'HighRisk',
-]
-const SERVICE_CATEGORIES = [
-    'Inpatient',
-    'Outpatient',
-    'Primary',
-    'Specialty',
-    'Drugs',
-]
 
 type MemberSatisfactionFactors = {
     careAccessibilityFactor: number
     providerTrustFactor: number
     conditionsManagedRate: number
     wellManagedRate: number
-    costAversionFactor: number
-    readmissionRate: number
-}
-
-type LowerIsBetterFactors = {
     costAversionFactor: number
     readmissionRate: number
 }
@@ -37,14 +20,27 @@ const MEMBER_SATISFACTION_WEIGHTS: MemberSatisfactionFactors = {
     wellManagedRate: 1.0,
     readmissionRate: 1.0,
 }
-const TOTAL_MEMBER_SATISFACTION_WEIGHT: number = (
-    Object
-        .values(MEMBER_SATISFACTION_WEIGHTS)
-        .reduce((sum, value) => sum + value, 0)
-)
 
 function orFallback(value: number | undefined, fallback: number): number {
     return value === undefined ? fallback : value
+}
+
+type FactorMap = {[key: string]: number}
+
+function getWeightedSum<T extends FactorMap>(factors: T, weights: T): number {
+    let sum = 0
+    Object.entries(factors).forEach(([key, value]) => {
+        const weight = weights[key]
+        const weighted = weight * value
+        sum += weighted
+    })
+    const totalWeights = (
+        Object
+            .values(weights)
+            .reduce((sum, value) => sum + value, 0)
+    )
+    const weightedSum = sum / totalWeights
+    return weightedSum
 }
 
 export function getMemberSatisfaction(vars: Partial<Variables>): number {
@@ -55,35 +51,55 @@ export function getMemberSatisfaction(vars: Partial<Variables>): number {
     const costAversionFactor = orFallback(vars?.costAversionFactor, 0)
     const readmissionRate = orFallback(vars?.readmissionRate, 0)
 
-    const lowerIsBetterFactors: LowerIsBetterFactors = {
-        costAversionFactor,
-        readmissionRate,
-    }
-    let reversedFactors: LowerIsBetterFactors = { ...lowerIsBetterFactors }
-    Object.entries(lowerIsBetterFactors).forEach(([key, value]) => {
-        const reversedValue = 1.0 - value
-        reversedFactors[key] = reversedValue
-    })
-
-    const allFactors: MemberSatisfactionFactors = {
+    const factors: MemberSatisfactionFactors = {
         careAccessibilityFactor,
         providerTrustFactor,
         conditionsManagedRate,
         wellManagedRate,
-        ...reversedFactors,
+        // Reversed Factors
+        costAversionFactor: 1 - costAversionFactor,
+        readmissionRate: 1 - readmissionRate,
     }
-    let weightedSum = 0
-    Object.entries(allFactors).forEach(([key, value]) => {
-        const weight = MEMBER_SATISFACTION_WEIGHTS[key]
-        const weighted = weight * value
-        weightedSum += weighted
-    })
-    const satisfaction = weightedSum / TOTAL_MEMBER_SATISFACTION_WEIGHT
+    const satisfaction = getWeightedSum(factors, MEMBER_SATISFACTION_WEIGHTS)
     return satisfaction
 }
 
+type ProviderSatisfactionFactors = {
+    providerAutonomyFactor: number
+    paymentRatio: number
+    providerReportingBurden: number
+}
+
+const PROVIDER_SATISFACTION_WEIGHTS: ProviderSatisfactionFactors = {
+    providerAutonomyFactor: 0.25,
+    paymentRatio: 0.5,
+    providerReportingBurden: 0.25,
+}
+
 export function getProviderSatisfaction(vars: Partial<Variables>): number {
-    return 1.0
+    const {
+        providerAutonomyFactor,
+        providerReportingBurden,
+        desiredReimbursementCents,
+        actualReimbursementCents,
+    } = vars
+    if (
+        providerAutonomyFactor === undefined
+        || providerReportingBurden === undefined
+        || desiredReimbursementCents === 0
+        || desiredReimbursementCents === undefined
+        || actualReimbursementCents === undefined
+    ) return 0
+
+    const paymentRatio = actualReimbursementCents / desiredReimbursementCents
+    const factors: ProviderSatisfactionFactors = {
+        providerAutonomyFactor,
+        paymentRatio,
+        // Reverse Factors
+        providerReportingBurden: 1 - providerReportingBurden,
+    }
+    const satisfaction = getWeightedSum(factors, PROVIDER_SATISFACTION_WEIGHTS)
+    return satisfaction
 }
 
 export function getQualityOfLife(vars: Partial<Variables>): number {
@@ -116,28 +132,13 @@ export function getQualityOfLifeGiniIndex(vars: Partial<Variables>): number {
 }
 
 export function getCentsPerMemberPerMonth(vars: Partial<Variables>): number {
-    const { memberCount } = vars
-    if (!memberCount) return 0
+    const {
+        memberCount,
+        desiredReimbursementCents
+    } = vars
+    if (!memberCount || !desiredReimbursementCents) return 0
 
-    let totalCents = 0
-    for (const category of SERVICE_CATEGORIES) {
-        for (const level of RISK_LEVELS) {
-            const rateName = `memberRate${level}`
-            const utilBaseName = `utilizationPerMemberPerYear${category}`
-            const utilFactorName = `utilizationFactor${level}`
-            const costName = `providerDesiredCentsPerUtilization${category}`
-            const rate = vars?.[rateName] || 0
-            const utilBase = vars?.[utilBaseName] || 0
-            const utilFactor = vars?.[utilFactorName] || 0
-            const cost = vars?.[costName] || 0
-            const members = memberCount * rate
-            const util = utilBase * utilFactor
-            const centsPerSegment = cost * util * members
-            totalCents += centsPerSegment
-        }
-    }
-
-    const centsPerMemberPerYear = totalCents / memberCount
+    const centsPerMemberPerYear = desiredReimbursementCents / memberCount
     const centsPerMemberPerMonth = centsPerMemberPerYear / MONTHS_PER_YEAR
     return Math.floor(centsPerMemberPerMonth)
 }
