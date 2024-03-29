@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap');
+
 html {
     --color-dark: #05477d;
     --color-darker: #001628;
@@ -11,11 +13,17 @@ html {
 
 /* App container */
 .game-container {
-    font-family: 'Arial', sans-serif;
+    font-family: "Titillium Web", sans-serif;
+    font-size: 18px;
+    line-height: 20px;
     display: flex;
     flex-direction: column;
     height: 100vh;
     margin: 0 auto;
+}
+
+button {
+    font-family: "Titillium Web", sans-serif;
 }
 
 .metrics-bar-container,
@@ -53,6 +61,7 @@ html {
     /* Allows the metric to be properly sized */
     margin: 0;
     padding: 20px;
+    padding-bottom: 25px;
 }
 
 .tooltip-text {
@@ -67,7 +76,7 @@ html {
     /* Positioning */
     position: absolute;
     z-index: 1;
-    top: 90px;
+    top: 100px;
     /* Adjust based on your layout */
     left: 50%;
     margin-left: -110px;
@@ -86,12 +95,12 @@ html {
 .tooltip-text::after {
     content: "";
     position: absolute;
-    top: -10px;
+    top: -16px;
     /* Position at the bottom of the tooltip */
     left: 50%;
-    margin-left: -5px;
+    margin-left: -8px;
     /* Half the width of the border to center the arrow */
-    border-width: 5px;
+    border-width: 8px;
     border-style: solid;
     border-color: transparent;
     border-bottom-color: var(--color-darker);
@@ -381,6 +390,7 @@ html {
         /* Stack metrics vertically on smaller screens */
         align-items: center;
         /* Center-align items for aesthetics */
+        padding: 0;
     }
 
     .metric {
@@ -388,6 +398,8 @@ html {
         /* Allow each metric to take full width */
         margin: 10px 0;
         /* Adjust spacing for vertical layout */
+        box-sizing: border-box;
+        width: 100%;
     }
 
     .metric-name,
