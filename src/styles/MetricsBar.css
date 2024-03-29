@@ -1,0 +1,116 @@
+/* Metrics bar styles */
+.metrics-bar-container {
+    display: flex;
+    justify-content: space-around;
+    box-sizing: border-box;
+    padding: 0 10px;
+    background: var(--color-dark);
+    color: white;
+    flex-wrap: wrap;
+    top: 0;
+    /* Allow metrics to wrap on small screens */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.metric {
+    text-align: center;
+    min-width: 120px;
+    position: relative;
+    /* Context for positioning tooltip */
+    display: inline-block;
+    /* Allows the metric to be properly sized */
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 25px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--color-darker);
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+
+    /* Positioning */
+    position: absolute;
+    z-index: 1;
+    top: 100px;
+    /* Adjust based on your layout */
+    left: 50%;
+    margin-left: -110px;
+    /* Centers the tooltip */
+
+    /* Fade in */
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    /* Necessary for arrow positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: -15px;
+    /* Position at the bottom of the tooltip */
+    left: 50%;
+    margin-left: -8px;
+    /* Half the width of the border to center the arrow */
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom-color: var(--color-darker);
+}
+
+.metric:hover {
+    cursor: pointer;
+    /* Indicates interactive element */
+    background: var(--color-darker);
+}
+
+.metric:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.metric-name {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.metric-value {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+@media (max-width: 870px) {
+
+    .metrics-bar-container {
+        flex-direction: column;
+        /* Stack metrics vertically on smaller screens */
+        align-items: center;
+        /* Center-align items for aesthetics */
+        padding: 0;
+    }
+
+    .metric {
+        flex-basis: 100%;
+        /* Allow each metric to take full width */
+        margin: 10px 0;
+        /* Adjust spacing for vertical layout */
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .metric-name,
+    .metric-value {
+        font-size: 1.2em;
+        /* Slightly larger text for better readability on small screens */
+    }
+
+}

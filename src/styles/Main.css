@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;700&display=swap');
+
+html {
+    --color-dark: #05477d;
+    --color-darker: #001628;
+    --color-light: #b0fff3;
+    --color-speech: #dffffa;
+    --color-accent: #09e0c0;
+    --color-accenter: #057766;
+    --color-selected: #d7f9b2;
+    background: var(--color-light);
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
 }
@@ -24,4 +37,49 @@ h5 {
 
 h6 {
     font-size: 1.00em;
+}
+
+.game-container {
+    font-family: "Titillium Web", sans-serif;
+    font-size: 18px;
+    line-height: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0 auto;
+}
+
+button {
+    font-family: "Titillium Web", sans-serif;
+}
+
+.metrics-bar-container,
+.decision-section {
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1200px;
+    z-index: 1;
+}
+
+@media (max-width: 870px) {
+
+    .metrics-bar-container,
+    .decision-section {
+        position: relative;
+        width: 100%;
+        left: 0;
+        transform: translateX(0);
+    }
+
+}
+
+/* Isometric game map styles */
+/* Assuming the Canvas component from React Three Fiber will be styled in-line or in its own dedicated stylesheet */
+
+.game-map {
+    height: 65vh;
+    min-height: 800px;
 }

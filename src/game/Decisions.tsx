@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/Decisions.css';
 
 // Types for the decision options and decisions
 export type Scenario = {

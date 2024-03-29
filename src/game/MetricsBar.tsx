@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/MetricsBar.css';
 
 // Define the props the MetricsBar component expects
 export type Metric = {
