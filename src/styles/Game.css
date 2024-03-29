@@ -95,7 +95,7 @@ button {
 .tooltip-text::after {
     content: "";
     position: absolute;
-    top: -16px;
+    top: -15px;
     /* Position at the bottom of the tooltip */
     left: 50%;
     margin-left: -8px;
