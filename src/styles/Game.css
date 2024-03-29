@@ -1,0 +1,387 @@
+/* App container */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Metrics bar styles */
+.metrics-bar-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background: #333;
+    color: white;
+    flex-wrap: wrap;
+    /* Allow metrics to wrap on small screens */
+}
+
+.metric {
+    text-align: center;
+    min-width: 120px;
+    /* Ensure metrics don't become too small */
+    margin: 5px;
+    /* Add some spacing */
+}
+
+.metric-name {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+.metric-value {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+@media (max-width: 768px) {
+    .metrics-bar-container {
+        flex-direction: column;
+        /* Stack metrics vertically on smaller screens */
+        align-items: center;
+        /* Center-align items for aesthetics */
+    }
+
+    .metric {
+        flex-basis: 100%;
+        /* Allow each metric to take full width */
+        margin: 10px 0;
+        /* Adjust spacing for vertical layout */
+    }
+
+    .metric-name,
+    .metric-value {
+        font-size: 1.2em;
+        /* Slightly larger text for better readability on small screens */
+    }
+}
+
+/* Isometric game map styles */
+/* Assuming the Canvas component from React Three Fiber will be styled in-line or in its own dedicated stylesheet */
+
+/* Decision presentation styles */
+.decision-presentation {
+    background: #f9f9f9;
+    padding: 20px;
+    border-top: 1px solid #ccc;
+}
+
+.decision h3 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.decision h4 {
+    margin-bottom: 5px;
+}
+
+.decision p {
+    margin-bottom: 10px;
+}
+
+.option {
+    width: 45%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    background: white;
+}
+
+.option button {
+    display: block;
+    margin: auto;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.option button:hover {
+    background: #0056b3;
+}
+
+.lock-in {
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+.lock-in:hover {
+    background: #218838;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Ensure elements are spaced out */
+    margin-bottom: 30px;
+}
+
+/* Adjust for left and right positioning */
+.option.left,
+.option.right {
+    justify-content: flex-start;
+    /* Align items to the left */
+}
+
+.option.right {
+    flex-direction: row-reverse;
+    /* Reverse order for right-positioned options */
+}
+
+.profile-image-container {
+    flex-shrink: 0;
+    /* Prevent the container from shrinking */
+    width: 100px;
+    /* Fixed width for the container */
+    height: 100px;
+    /* Fixed height to maintain aspect ratio */
+    margin: 0 20px;
+    /* Adjust margin for spacing */
+    display: flex;
+    /* Use flex to center the image inside the container */
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.right .profile-image {
+    transform: scaleX(-1);
+}
+
+.speech-bubble {
+    flex-grow: 1;
+    /* Allow the speech bubble to fill the available space */
+    position: relative;
+    background: #f0f0f0;
+    border-radius: 16px;
+    padding: 20px;
+    margin: 0 20px;
+    /* Ensure some spacing around the speech bubble */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 30px;
+    border: 10px solid transparent;
+}
+
+/* Left-hand side bubble */
+.speech-bubble::before {
+    left: -20px;
+    border-right-color: #f0f0f0;
+}
+
+/* Right-hand side bubble */
+.right .speech-bubble {
+    order: 2;
+}
+
+.right .speech-bubble::before {
+    right: -20px;
+    /* Adjust as needed */
+    left: auto;
+    border-left-color: #f0f0f0;
+    border-right-color: transparent;
+}
+
+/* Speech Bubble Tail for Left Positioned Option */
+.option.left .speech-bubble::before {
+    left: -20px;
+    border-right-color: #f0f0f0;
+    /* Adjust color to match speech bubble */
+    border-left-color: transparent;
+}
+
+/* Speech Bubble Tail for Right Positioned Option */
+.option.right .speech-bubble::before {
+    right: -20px;
+    left: auto;
+    border-left-color: #f0f0f0;
+    /* Adjust color to match speech bubble */
+    border-right-color: transparent;
+}
+
+.selected {
+    border-color: #007bff;
+}
+
+.speech-bubble.selected {
+    background: #e0ffe0;
+}
+
+.left .speech-bubble.selected::before {
+    border-right-color: #e0ffe0;
+}
+
+.right .speech-bubble.selected::before {
+    border-left-color: #e0ffe0;
+    border-right-color: transparent;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    /* Default layout for larger screens */
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .options {
+        flex-direction: column;
+        /* Stack options vertically on small screens */
+        align-items: center;
+        /* Center-align the items for aesthetics */
+    }
+
+    .option {
+        width: 100%;
+        /* Ensure each option takes full width on smaller screens */
+        margin-bottom: 15px;
+        /* Add some space between the options */
+        flex-direction: column !important;
+    }
+
+
+    .profile-image-container {
+        display: flex;
+        /* To ensure the image is centered within the container */
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        /* Adds some space between the image and the speech bubble */
+    }
+
+
+    .speech-bubble {
+        width: 80%;
+        /* Adjust based on desired width of the speech bubble on small screens */
+        /* Ensure speech bubble fills its row */
+        margin-top: 0;
+        /* Adjust if needed based on design preference */
+        text-align: center;
+        /* Center the text within the speech bubble */
+    }
+
+    /* First option (pro argument) with stem at the top */
+    .option.left .speech-bubble::before,
+    .option.right .speech-bubble::after {
+        top: -20px;
+        /* Position stem at the top */
+        bottom: auto;
+        /* Reset bottom positioning */
+        left: 50%;
+        /* Center stem */
+        transform: translateX(-50%);
+        /* Center the stem with respect to the bubble */
+        border-right-color: transparent;
+        /* Hide the top border for the stem */
+        border-bottom-color: #f0f0f0;
+        /* Hide the top border for the stem */
+    }
+
+    /* Second option (con argument) with stem at the bottom */
+    .option.right .speech-bubble::after {
+        content: '';
+        /* Create a new pseudoelement for the bottom stem */
+        position: absolute;
+        width: 0;
+        height: 0;
+        top: -10px;
+        /* Position at the top */
+        transform: translateX(-50%);
+        /* Ensure it's centered under the bubble */
+        border-bottom: 10px solid #f0f0f0;
+        /* Color to match the speech bubble */
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+
+    /* Ensuring the original ::before pseudoelement doesn't interfere with the right option */
+    .option.right .speech-bubble::before {
+        content: none;
+    }
+
+    /* Selected state adjustments */
+    .option.left .speech-bubble.selected::before,
+    .option.right .speech-bubble.selected::after {
+        border-top-color: transparent;
+        border-bottom-color: #e0ffe0;
+    }
+}
+
+.decision-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.decision-navigation button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #007bff;
+    /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.decision-navigation .button-next {
+    margin-left: auto;
+    /* Pushes the "Next" button to the far right */
+}
+
+.decision-navigation button:hover {
+    background-color: #0056b3;
+    /* Darken button on hover */
+}
+
+.decision-navigation button:disabled {
+    background-color: #cccccc;
+    /* Grayed out for disabled state */
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .decision-navigation {
+        flex-direction: column;
+        /* Stack buttons vertically on small screens */
+    }
+
+    .decision-navigation button {
+        width: 100%;
+        /* Full width buttons on small screens */
+        margin-bottom: 10px;
+        /* Add space between stacked buttons */
+    }
+}
