@@ -1,19 +1,41 @@
+html {
+    --color-dark: #05477d;
+    --color-darker: #001628;
+    --color-light: #b0fff3;
+    --color-speech: #dffffa;
+    --color-accent: #09e0c0;
+    --color-accenter: #057766;
+    --color-selected: #d7f9b2;
+    background: var(--color-light);
+}
+
 /* App container */
 .game-container {
+    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
-    font-family: 'Arial', sans-serif;
+    max-width: 1200px;
+    height: 100vh;
+    margin: 0 auto;
 }
 
 /* Metrics bar styles */
 .metrics-bar-container {
     display: flex;
     justify-content: space-around;
-    padding: 10px;
-    background: #333;
+    box-sizing: border-box;
+    padding: 0 10px;
+    background: var(--color-dark);
     color: white;
     flex-wrap: wrap;
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    top: 0;
+    z-index: 1;
     /* Allow metrics to wrap on small screens */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .metric {
@@ -23,15 +45,15 @@
     /* Context for positioning tooltip */
     display: inline-block;
     /* Allows the metric to be properly sized */
-    margin: 5px;
-    padding: 10px;
+    margin: 0;
+    padding: 20px;
 }
 
 .tooltip-text {
     visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
+    width: 200px;
+    background-color: var(--color-darker);
+    color: white;
     text-align: center;
     border-radius: 6px;
     padding: 10px;
@@ -39,10 +61,10 @@
     /* Positioning */
     position: absolute;
     z-index: 1;
-    top: 65px;
+    top: 90px;
     /* Adjust based on your layout */
     left: 50%;
-    margin-left: -70px;
+    margin-left: -110px;
     /* Centers the tooltip */
 
     /* Fade in */
@@ -66,12 +88,12 @@
     border-width: 5px;
     border-style: solid;
     border-color: transparent;
-    border-bottom-color: black;
+    border-bottom-color: var(--color-darker);
 }
 
 .metric:hover {
-    cursor: pointer;
-    /* Indicates interactive element */
+    cursor: pointer; /* Indicates interactive element */
+    background: var(--color-darker);
 }
 
 .metric:hover .tooltip-text {
@@ -80,7 +102,7 @@
 }
 
 .metric-name {
-    font-size: 1em;
+    font-size: 0.9em;
     margin-bottom: 5px;
 }
 
@@ -89,42 +111,35 @@
     font-size: 1.5em;
 }
 
-@media (max-width: 768px) {
-    .metrics-bar-container {
-        flex-direction: column;
-        /* Stack metrics vertically on smaller screens */
-        align-items: center;
-        /* Center-align items for aesthetics */
-    }
-
-    .metric {
-        flex-basis: 100%;
-        /* Allow each metric to take full width */
-        margin: 10px 0;
-        /* Adjust spacing for vertical layout */
-    }
-
-    .metric-name,
-    .metric-value {
-        font-size: 1.2em;
-        /* Slightly larger text for better readability on small screens */
-    }
-}
-
 /* Isometric game map styles */
 /* Assuming the Canvas component from React Three Fiber will be styled in-line or in its own dedicated stylesheet */
 
+.game-map {
+    height: 65vh;
+}
+
 /* Decision presentation styles */
+
+.decision-section {
+    box-sizing: border-box;
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    bottom: 0;
+    z-index: 1;
+    background: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 .decision-presentation {
-    background: #f9f9f9;
-    padding: 20px;
-    border-top: 1px solid #ccc;
+    padding: 30px;
 }
 
 .decision h3 {
     font-size: 1.5em;
-    color: #333;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .decision h4 {
@@ -132,23 +147,25 @@
 }
 
 .decision p {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
     margin-bottom: 10px;
 }
 
 .option {
     width: 45%;
     padding: 10px;
-    border: 2px solid #ddd;
+    border: 2px solid transparent;
     border-radius: 10px;
     text-align: center;
-    background: white;
 }
 
 .option button {
     display: block;
     margin: auto;
     padding: 10px 20px;
-    background: #007bff;
+    background: var(--color-accent);
     color: white;
     border: none;
     border-radius: 5px;
@@ -157,14 +174,14 @@
 }
 
 .option button:hover {
-    background: #0056b3;
+    background: var(--color-accenter);
 }
 
 .lock-in {
     display: block;
     width: 100%;
     padding: 15px 0;
-    background: #28a745;
+    background: var(--color-dark);
     color: white;
     border: none;
     border-radius: 5px;
@@ -174,7 +191,7 @@
 }
 
 .lock-in:hover {
-    background: #218838;
+    background: var(--color-darker);
 }
 
 .option {
@@ -182,7 +199,9 @@
     align-items: center;
     justify-content: space-between;
     /* Ensure elements are spaced out */
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px 10px;
 }
 
 /* Adjust for left and right positioning */
@@ -227,7 +246,7 @@
     flex-grow: 1;
     /* Allow the speech bubble to fill the available space */
     position: relative;
-    background: #f0f0f0;
+    background: var(--color-speech);
     border-radius: 16px;
     padding: 20px;
     margin: 0 20px;
@@ -251,7 +270,7 @@
 /* Left-hand side bubble */
 .speech-bubble::before {
     left: -20px;
-    border-right-color: #f0f0f0;
+    border-right-color: var(--color-speech);
 }
 
 /* Right-hand side bubble */
@@ -263,14 +282,14 @@
     right: -20px;
     /* Adjust as needed */
     left: auto;
-    border-left-color: #f0f0f0;
+    border-left-color: var(--color-speech);
     border-right-color: transparent;
 }
 
 /* Speech Bubble Tail for Left Positioned Option */
 .option.left .speech-bubble::before {
     left: -20px;
-    border-right-color: #f0f0f0;
+    border-right-color: var(--color-speech);
     /* Adjust color to match speech bubble */
     border-left-color: transparent;
 }
@@ -279,25 +298,25 @@
 .option.right .speech-bubble::before {
     right: -20px;
     left: auto;
-    border-left-color: #f0f0f0;
+    border-left-color: var(--color-speech);
     /* Adjust color to match speech bubble */
     border-right-color: transparent;
 }
 
 .selected {
-    border-color: #007bff;
+    border-color: var(--color-selected);
 }
 
 .speech-bubble.selected {
-    background: #e0ffe0;
+    background: var(--color-selected);
 }
 
 .left .speech-bubble.selected::before {
-    border-right-color: #e0ffe0;
+    border-right-color: var(--color-selected);
 }
 
 .right .speech-bubble.selected::before {
-    border-left-color: #e0ffe0;
+    border-left-color: var(--color-selected);
     border-right-color: transparent;
 }
 
@@ -309,7 +328,69 @@
     margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
+.decision-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.decision-navigation button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: var(--color-accent);
+    /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.decision-navigation .button-next {
+    margin-left: auto;
+    /* Pushes the "Next" button to the far right */
+}
+
+.decision-navigation button:hover {
+    background-color: var(--color-accenter);
+    /* Darken button on hover */
+}
+
+.decision-navigation button:disabled {
+    background-color: lightgray;
+    /* Grayed out for disabled state */
+    cursor: not-allowed;
+}
+
+
+@media (max-width: 870px) {
+
+    .metrics-bar-container, .decision-section {
+        position: relative;
+        width: 100%;
+        left: 0;
+    }
+
+    .metrics-bar-container {
+        flex-direction: column;
+        /* Stack metrics vertically on smaller screens */
+        align-items: center;
+        /* Center-align items for aesthetics */
+    }
+
+    .metric {
+        flex-basis: 100%;
+        /* Allow each metric to take full width */
+        margin: 10px 0;
+        /* Adjust spacing for vertical layout */
+    }
+
+    .metric-name,
+    .metric-value {
+        font-size: 1.2em;
+        /* Slightly larger text for better readability on small screens */
+    }
+
     .options {
         flex-direction: column;
         /* Stack options vertically on small screens */
@@ -359,7 +440,7 @@
         /* Center the stem with respect to the bubble */
         border-right-color: transparent;
         /* Hide the top border for the stem */
-        border-bottom-color: #f0f0f0;
+        border-bottom-color: var(--color-speech);
         /* Hide the top border for the stem */
     }
 
@@ -389,45 +470,9 @@
     .option.left .speech-bubble.selected::before,
     .option.right .speech-bubble.selected::after {
         border-top-color: transparent;
-        border-bottom-color: #e0ffe0;
+        border-bottom-color: var(--color-selected);
     }
-}
 
-.decision-navigation {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.decision-navigation button {
-    padding: 10px 20px;
-    font-size: 1em;
-    background-color: #007bff;
-    /* Primary button color */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.decision-navigation .button-next {
-    margin-left: auto;
-    /* Pushes the "Next" button to the far right */
-}
-
-.decision-navigation button:hover {
-    background-color: #0056b3;
-    /* Darken button on hover */
-}
-
-.decision-navigation button:disabled {
-    background-color: #cccccc;
-    /* Grayed out for disabled state */
-    cursor: not-allowed;
-}
-
-@media (max-width: 768px) {
     .decision-navigation {
         flex-direction: column;
         /* Stack buttons vertically on small screens */
@@ -439,4 +484,5 @@
         margin-bottom: 10px;
         /* Add space between stacked buttons */
     }
+
 }

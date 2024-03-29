@@ -18,7 +18,7 @@ const initialMetrics: Metric[] = [
         value: "67",
     },
     {
-        name: "Cost per Member per Month",
+        name: "Cost PMPM",
         explanation: "Lower is better. Average cost of healthcare services provided per member per month.",
         value: "$254",
     },
@@ -115,7 +115,9 @@ const App: React.FC = () => {
             <div className="metrics-bar">
                 <MetricsBar metrics={metrics} />
             </div>
-            <IsometricGameMap />
+            <div className="game-map">
+                <IsometricGameMap />
+            </div>
             <div className="decision-section">
                 <DecisionPresentation
                     decisions={decisions}
