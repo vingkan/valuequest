@@ -74,6 +74,52 @@ Navigate these decisions to get ready for contract year 2024.
                     ],
                 },
             ],
-        }
+        },
+        {
+            scenario: {
+                title: 'Contract Year 2025',
+                description: `
+You made it through your first year!
+Some of the data was delayed, but you got through it.
+Now it's time to prepare for contract year 2025.
+                `,
+            },
+            decisions: [
+                {
+                    id: 'expand-geo-attribution',
+                    title: 'Expand Geo Attribution',
+                    description: 'Geo (geographic) attribution assigns patients to a nearby doctor. We currently attribute very few patients this way. Should we expand our use of this method?',
+                    options: [
+                        {
+                            character: 'Data Scientist',
+                            description: 'Geo would double the number of lives our value-based contracts cover. More revenue for providers, better outcomes for patients, and more growth for our program.',
+                            imageUrl: 'assets/characters/character-9.png',
+                        },
+                        {
+                            character: 'Member Services Coordinator',
+                            description: 'Just because a member lives near a doctor doesn\'t mean they\'ll go see them. I am skeptical that this will actually move the needle.',
+                            imageUrl: 'assets/characters/character-6.png',
+                        }
+                    ],
+                },
+                {
+                    id: 'use-prior-year-benchmarks',
+                    title: 'Use Prior Year Benchmarks',
+                    description: 'Currently, providers have to do better than the regional average to get their performance bonuses. Providers complain about that, so we are considering benchmarking against their previous year\'s performance instead. They don\'t love that either.',
+                    options: [
+                        {
+                            character: 'Medical Director',
+                            description: 'Regional benchmarks feel unfair because you are going up against providers with much more resources. Competing with yourself from last year will be an easier sell.',
+                            imageUrl: 'assets/characters/character-11.png',
+                        },
+                        {
+                            character: 'Health Economist',
+                            description: 'We can adjust the regional benchmarks to consider only "peer" providers who are similar in size. But, adjusting for year-over-year changes could expose us to much more risk.',
+                            imageUrl: 'assets/characters/character-10.png',
+                        }
+                    ],
+                },
+            ],
+        },
     ]
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Scenario, DecisionOption, Decision } from '../scenarios/scenario.tsx'
 import '../styles/Decisions.css';
 
@@ -65,61 +65,6 @@ const DecisionComponent: React.FC<DecisionProps> = ({ decision, onMakeDecision }
     );
 };
 
-// Main component for decision presentation
-const DecisionPresentation2: React.FC<DecisionPresentationProps> = ({
-    decisions,
-    onMakeDecision,
-    onLockDecisions,
-}) => {
-    const [currentDecisionIndex, setCurrentDecisionIndex] = useState(0);
-
-    const currentDecision = decisions[currentDecisionIndex];
-
-    // Check if all decisions have a selected option
-    const allDecisionsMade = decisions.every(decision => decision.selectedOptionIndex !== undefined);
-
-    const handleDecisionNavigation = (direction: 'next' | 'previous') => {
-        setCurrentDecisionIndex(prevIndex => {
-            let newIndex = direction === 'next' ? prevIndex + 1 : prevIndex - 1;
-            // Boundary conditions
-            newIndex = Math.max(0, Math.min(newIndex, decisions.length - 1));
-            return newIndex;
-        });
-    };
-
-    const handleMakeDecision = (optionIndex: number) => {
-        onMakeDecision(currentDecision.id, optionIndex);
-    };
-
-    return (
-        <div className="decision-presentation">
-            <DecisionComponent
-                key={currentDecision.id}
-                decision={currentDecision}
-                onMakeDecision={handleMakeDecision}
-            />
-            <div className="decision-navigation">
-                {currentDecisionIndex > 0 && (
-                    <button onClick={() => handleDecisionNavigation('previous')}>
-                        Previous
-                    </button>
-                )}
-                {currentDecisionIndex < decisions.length - 1 && (
-                    <button onClick={() => handleDecisionNavigation('next')} className="button-next">
-                        Next
-                    </button>
-                )}
-            </div>
-            {currentDecisionIndex === decisions.length - 1 && allDecisionsMade && (
-                <div className="lock-in-section">
-                    <button onClick={onLockDecisions} className="lock-in">
-                        Lock in Decisions
-                    </button>
-                </div>
-            )}
-        </div>
-    );
-};
 export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
     roundIndex,
     totalRounds,
@@ -129,6 +74,10 @@ export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
     onLockDecisions,
 }) => {
     const [currentStep, setCurrentStep] = useState(0); // 0 for introduction, decisions.length + 1 for summary
+
+    useEffect(() => {
+        setCurrentStep(0);
+    }, [roundIndex]);
 
     const handleNext = () => {
         if (currentStep <= decisions.length) {
