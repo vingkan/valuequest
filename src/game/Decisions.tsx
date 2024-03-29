@@ -16,6 +16,8 @@ type DecisionProps = {
 };
 
 type DecisionPresentationProps = {
+    roundIndex: number;
+    totalRounds: number;
     scenario: Scenario;
     decisions: Decision[];
     onMakeDecision: (decisionId: string, optionIndex: number) => void;
@@ -119,6 +121,8 @@ const DecisionPresentation2: React.FC<DecisionPresentationProps> = ({
     );
 };
 export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
+    roundIndex,
+    totalRounds,
     scenario,
     decisions,
     onMakeDecision,
@@ -147,10 +151,11 @@ export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
         <div className="decision-presentation">
             {currentStep === 0 ? (
                 <div className="introduction">
-                    <h3>{scenario.title}</h3>
+                <h3>Round {roundIndex + 1} of {totalRounds}</h3>
+                    <h2>{scenario.title}</h2>
                     <div className="introduction-content">
-                        {scenario.description.split('\n').map((line) => (
-                            <p>{line}</p>
+                        {scenario.description.trim().split('\n').map((line) => (
+                            <p>{line.trim()}</p>
                         ))}
                     </div>
                     <div className="decision-navigation">

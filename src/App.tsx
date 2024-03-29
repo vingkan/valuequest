@@ -59,6 +59,8 @@ const App: React.FC<AppProps> = ({ game }) => {
             </div>
             <div className="decision-section">
                 <DecisionPresentation
+                    roundIndex={roundIndex}
+                    totalRounds={game.rounds.length}
                     scenario={round.scenario}
                     decisions={decisions}
                     onMakeDecision={handleMakeDecision}

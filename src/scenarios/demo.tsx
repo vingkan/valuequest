@@ -31,16 +31,16 @@ export const DEMO_GAME: Game = {
     rounds: [
         {
             scenario: {
-                title: 'Round 1: Contract Year 2024',
+                title: 'Contract Year 2024',
                 description: `
 You lead the value-based care team at a health insurance plan.
 Your job is to manage the pilot and make it a huge success.
 Navigate these decisions to get ready for contract year 2024.
-            `,
+                `,
             },
             decisions: [
                 {
-                    id: 'incentives-negotiation',
+                    id: 'offer-more-contract-incentives',
                     title: 'Offer More Contract Incentives',
                     description: 'One of our providers wants a revised contract with more performance incentive bonus money. Should we agree to this deal?',
                     options: [
@@ -57,7 +57,7 @@ Navigate these decisions to get ready for contract year 2024.
                     ],
                 },
                 {
-                    id: 'written-care-coordination-plan',
+                    id: 'require-care-coordination-plan',
                     title: 'Require Care Coordination Plan',
                     description: 'Should we require providers to submit a written plan explaining how they will use care coordination fees as a requirement to receive the payments?',
                     options: [
