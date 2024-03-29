@@ -148,17 +148,18 @@ button {
     padding: 30px;
 }
 
-.decision h3 {
+.decision-presentation h3 {
     font-size: 1.5em;
     margin-bottom: 10px;
     text-align: center;
 }
 
-.decision h4 {
+.decision-presentation h4 {
     margin-bottom: 5px;
 }
 
-.decision p {
+.decision p,
+.introduction p {
     text-align: center;
     max-width: 600px;
     margin: 0 auto;
@@ -189,20 +190,11 @@ button {
     background: var(--color-accenter);
 }
 
-.lock-in {
-    display: block;
-    width: 100%;
-    padding: 15px 0;
+.decision-navigation .button-lock-in {
     background: var(--color-dark);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2em;
-    margin-top: 10px;
 }
 
-.lock-in:hover {
+.decision-navigation .button-lock-in:hover {
     background: var(--color-darker);
 }
 
@@ -358,6 +350,10 @@ button {
     transition: background-color 0.3s ease;
 }
 
+.decision-navigation .button-start {
+    margin: auto;
+}
+
 .decision-navigation .button-next {
     margin-left: auto;
     /* Pushes the "Next" button to the far right */
@@ -374,6 +370,18 @@ button {
     cursor: not-allowed;
 }
 
+.introduction-content {
+    margin: 20px auto;
+}
+
+.selected-choices {
+    max-width: 300px;
+    margin: 20px auto;
+}
+
+.selected-choices p {
+    margin: 10px auto;
+}
 
 @media (max-width: 870px) {
 

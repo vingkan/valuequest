@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MetricsBar, Metric } from './game/MetricsBar';
 import { IsometricGameMap } from './game/GameMap';
-import { DecisionPresentation, Decision } from './game/Decisions';
+import { DecisionPresentation, Decision, Scenario } from './game/Decisions';
 import './styles/Game.css'
 
 // Define types for our game state
@@ -34,10 +34,20 @@ const initialMetrics: Metric[] = [
     },
 ];
 
+const scenario: Scenario = {
+    title: 'Round 1: Contract Year 2024',
+    description: `
+You lead the value-based care team at a health insurance plan.
+Your job is to manage the pilot and make it a huge success.
+Navigate these decisions to get ready for contract year 2024.
+`.trim(),
+};
+
+
 const initialDecisions: Decision[] = [
     {
         id: 'incentives-negotiation',
-        title: 'Contract Negotiation',
+        title: 'Offer More Contract Incentives',
         description: 'One of our providers wants a revised contract with more performance incentive bonus money. Should we agree to this deal?',
         options: [
             {
@@ -54,7 +64,7 @@ const initialDecisions: Decision[] = [
     },
     {
         id: 'written-care-coordination-plan',
-        title: 'Care Coordination Plan',
+        title: 'Require Care Coordination Plan',
         description: 'Should we require providers to submit a written plan explaining how they will use care coordination fees as a requirement to receive the payments?',
         options: [
             {
@@ -120,6 +130,7 @@ const App: React.FC = () => {
             </div>
             <div className="decision-section">
                 <DecisionPresentation
+                    scenario={scenario}
                     decisions={decisions}
                     onMakeDecision={handleMakeDecision}
                     onLockDecisions={handleLockDecisions}

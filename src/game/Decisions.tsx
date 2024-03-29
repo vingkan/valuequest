@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
 // Types for the decision options and decisions
+export type Scenario = {
+    title: string;
+    description: string;
+};
+
 type DecisionOption = {
     character: string;
     description: string;
@@ -29,6 +34,7 @@ type DecisionProps = {
 };
 
 type DecisionPresentationProps = {
+    scenario: Scenario;
     decisions: Decision[];
     onMakeDecision: (decisionId: string, optionIndex: number) => void;
     onLockDecisions: () => void;
@@ -76,7 +82,7 @@ const DecisionComponent: React.FC<DecisionProps> = ({ decision, onMakeDecision }
 };
 
 // Main component for decision presentation
-export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
+const DecisionPresentation2: React.FC<DecisionPresentationProps> = ({
     decisions,
     onMakeDecision,
     onLockDecisions,
@@ -125,6 +131,94 @@ export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
                     <button onClick={onLockDecisions} className="lock-in">
                         Lock in Decisions
                     </button>
+                </div>
+            )}
+        </div>
+    );
+};
+export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
+    scenario,
+    decisions,
+    onMakeDecision,
+    onLockDecisions,
+}) => {
+    const [currentStep, setCurrentStep] = useState(0); // 0 for introduction, decisions.length + 1 for summary
+
+    const handleNext = () => {
+        if (currentStep <= decisions.length) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentStep > 0) {
+            setCurrentStep(currentStep - 1);
+        }
+    };
+
+    const currentDecision = decisions[currentStep - 1];
+
+    // Check if all decisions have a selected option
+    const allDecisionsMade = decisions.every(decision => decision.selectedOptionIndex !== undefined);
+
+    return (
+        <div className="decision-presentation">
+            {currentStep === 0 ? (
+                <div className="introduction">
+                    <h3>{scenario.title}</h3>
+                    <div className="introduction-content">
+                        {scenario.description.split('\n').map((line) => (
+                            <p>{line}</p>
+                        ))}
+                    </div>
+                    <div className="decision-navigation">
+                        <button onClick={handleNext} className="button-start">Start</button>
+                    </div>
+                </div>
+            ) : currentStep > decisions.length ? (
+                <div className="summary">
+                    <h3>Decisions Summary</h3>
+                    <div className="selected-choices">
+                        {decisions.map((decision, index) => {
+                            const hasSelection = decision.selectedOptionIndex !== undefined
+                            const isYes = decision.selectedOptionIndex === 0
+                            const selection = (
+                                hasSelection
+                                    ? (isYes ? 'Yes' : 'No')
+                                    : 'No Decision'
+                            )
+                            const emoji = (
+                                hasSelection ? (isYes ? '✅' : '❌') : '🤔'
+                            )
+                            return (
+                                <p key={index}>
+                                    {emoji} {selection}: {decision.title}
+                                </p>
+                            )
+                        })}
+                    </div>
+                    <div className="decision-navigation">
+                        <button onClick={() => setCurrentStep(decisions.length)}>Back</button>
+                        {allDecisionsMade && (
+                            <button onClick={onLockDecisions} className="button-lock-in">
+                                Lock in Decisions
+                            </button>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <div className="decision">
+                    <DecisionComponent
+                        key={currentDecision.id}
+                        decision={currentDecision}
+                        onMakeDecision={
+                            (optionIndex) => onMakeDecision(currentDecision.id, optionIndex)
+                        }
+                    />
+                    <div className="decision-navigation">
+                        <button onClick={handlePrevious}>Previous</button>
+                        <button onClick={handleNext} className="button-next">Next</button>
+                    </div>
                 </div>
             )}
         </div>
