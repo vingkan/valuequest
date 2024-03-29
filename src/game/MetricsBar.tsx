@@ -4,6 +4,7 @@ import React from 'react';
 export type Metric = {
     name: string;
     value: string;
+    explanation: string;
 };
 
 type MetricsBarProps = {
@@ -14,9 +15,10 @@ export const MetricsBar: React.FC<MetricsBarProps> = ({ metrics }) => {
     return (
         <div className="metrics-bar-container">
             {metrics.map((metric, index) => (
-                <div key={index} className="metric">
+                <div className="metric" key={metric.name}>
                     <div className="metric-name">{metric.name}</div>
                     <div className="metric-value">{metric.value}</div>
+                    <span className="tooltip-text">{metric.explanation}</span>
                 </div>
             ))}
         </div>

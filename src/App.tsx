@@ -6,20 +6,32 @@ import './styles/Game.css'
 
 // Define types for our game state
 
-enum Metrics {
-    MemberSatisfaction = "Member Satisfaction",
-    QualityOfLife = "Quality of Life",
-    CostPerMemberPerMonth = "Cost per Member per Month",
-    ProviderSatisfaction = "Provider Satisfaction",
-    HealthInequality = "Health Inequality",
-}
-
 const initialMetrics: Metric[] = [
-    { name: Metrics.MemberSatisfaction, value: "55" },
-    { name: Metrics.QualityOfLife, value: "67" },
-    { name: Metrics.CostPerMemberPerMonth, value: "$254" },
-    { name: Metrics.ProviderSatisfaction, value: "32" },
-    { name: Metrics.HealthInequality, value: "0.17" },
+    {
+        name: "Member Satisfaction",
+        explanation: "Higher is better. Score from 0 to 100 capturing how happy members are with their healthcare.",
+        value: "55",
+    },
+    {
+        name: "Quality of Life",
+        explanation: "Higher is better. Score from 0 (patient died) to 100 (patient has no health issues).",
+        value: "67",
+    },
+    {
+        name: "Cost per Member per Month",
+        explanation: "Lower is better. Average cost of healthcare services provided per member per month.",
+        value: "$254",
+    },
+    {
+        name: "Provider Satisfaction",
+        explanation: "Higher is better. Score from 0 to 100 capturing how happy providers are with their work and life.",
+        value: "32",
+    },
+    {
+        name: "Health Inequality",
+        explanation: "Lower is better. Score from 0 (all patients have the same quality of life) to 1 (maximum inequality).",
+        value: "0.17",
+    },
 ];
 
 const initialDecisions: Decision[] = [

@@ -19,9 +19,64 @@
 .metric {
     text-align: center;
     min-width: 120px;
-    /* Ensure metrics don't become too small */
+    position: relative;
+    /* Context for positioning tooltip */
+    display: inline-block;
+    /* Allows the metric to be properly sized */
     margin: 5px;
-    /* Add some spacing */
+    padding: 10px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+
+    /* Positioning */
+    position: absolute;
+    z-index: 1;
+    top: 65px;
+    /* Adjust based on your layout */
+    left: 50%;
+    margin-left: -70px;
+    /* Centers the tooltip */
+
+    /* Fade in */
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    /* Necessary for arrow positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: -10px;
+    /* Position at the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    /* Half the width of the border to center the arrow */
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom-color: black;
+}
+
+.metric:hover {
+    cursor: pointer;
+    /* Indicates interactive element */
+}
+
+.metric:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
 
 .metric-name {
