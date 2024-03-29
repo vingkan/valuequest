@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { MetricsBar, Metric } from './game/MetricsBar';
-import { IsometricGameMap } from './game/GameMap';
-import { DecisionPresentation, Decision, Scenario } from './game/Decisions';
+import { MetricsBar, Metric } from './game/MetricsBar.tsx';
+import { IsometricGameMap } from './game/GameMap.tsx';
+import { DecisionPresentation, Decision, Scenario } from './game/Decisions.tsx';
 import './styles/Game.css'
 
 // Define types for our game state

@@ -2,7 +2,7 @@ import { expect, test } from 'vitest'
 import {
     getCostCentsByCategory,
     getDesiredReimbursementCents,
-} from './cost'
+} from './cost.tsx'
 
 test('calculate cost by category in cents', () => {
     const actual = getCostCentsByCategory({

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { ServiceCategory } from '../simulation/cost'
-import { getSimpleSharedSavingsModel } from './shared_savings'
+import { ServiceCategory } from '../simulation/cost.tsx'
+import { getSimpleSharedSavingsModel } from './shared_savings.tsx'
 
 test('shared savings model where spend exactly matches target', () => {
     const model = getSimpleSharedSavingsModel({

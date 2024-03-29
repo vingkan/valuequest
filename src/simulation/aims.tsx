@@ -1,5 +1,5 @@
-import { getGiniIndex } from './gini'
-import { Variables } from './variables'
+import { getGiniIndex } from './gini.tsx'
+import { Variables } from './variables.tsx'
 
 const MONTHS_PER_YEAR = 12
 

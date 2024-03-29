@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { getGiniIndex } from './gini'
+import { getGiniIndex } from './gini.tsx'
 
 test('calculate perfectly equal gini index', () => {
     const actual = getGiniIndex([10, 10])

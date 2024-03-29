@@ -4,17 +4,17 @@ import {
     getCentsPerMemberPerMonth,
     getProviderSatisfaction,
     getQualityOfLifeGiniIndex,
-} from './aims'
+} from './aims.tsx'
 import {
     getCostCentsByCategory,
     getDesiredReimbursementCents,
-} from './cost'
+} from './cost.tsx'
 import {
     PaymentModel,
     getPaymentModelOutputs,
     getActualReimbursementCents
-} from './payment'
-import { Inputs, Outputs, Variables } from './variables'
+} from './payment.tsx'
+import { Inputs, Outputs, Variables } from './variables.tsx'
 
 export function simulate(inputs: Inputs, models: PaymentModel[]): Variables {
     // Calculate costs

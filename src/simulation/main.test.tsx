@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { simulate } from './main'
+import { simulate } from './main.tsx'
 
 test('run simulation with no payment models', () => {
     const inputs = {

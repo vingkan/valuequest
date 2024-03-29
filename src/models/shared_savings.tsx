@@ -1,9 +1,9 @@
-import { ServiceCategory } from '../simulation/cost'
+import { ServiceCategory } from '../simulation/cost.tsx'
 import {
     PaymentModel,
     PaymentModelOutput,
-} from '../simulation/payment'
-import { Variables } from '../simulation/variables'
+} from '../simulation/payment.tsx'
+import { Variables } from '../simulation/variables.tsx'
 
 type SharedSavingsParams = {
     targetSpendCentsPerMemberPerYear: number

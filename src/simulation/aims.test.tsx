@@ -5,7 +5,7 @@ import {
     getQualityOfLife,
     getQualityOfLifeGiniIndex,
     getCentsPerMemberPerMonth,
-} from './aims'
+} from './aims.tsx'
 
 test('calculate default perfect member satisfaction', () => {
     const actual = getMemberSatisfaction({})

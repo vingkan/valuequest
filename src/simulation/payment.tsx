@@ -1,4 +1,4 @@
-import { Variables } from './variables'
+import { Variables } from './variables.tsx'
 
 export type PaymentModelOutput = {
     paymentCents: number

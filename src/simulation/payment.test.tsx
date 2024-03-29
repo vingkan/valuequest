@@ -1,5 +1,8 @@
 import { expect, test } from 'vitest'
-import { getPaymentModelOutputs, getActualReimbursementCents } from './payment'
+import {
+    getPaymentModelOutputs,
+    getActualReimbursementCents,
+} from './payment.tsx'
 
 test('calculate total reimbursement in cents', () => {
     const actual = getActualReimbursementCents([
