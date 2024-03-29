@@ -1,25 +1,6 @@
 import React, { useState } from 'react';
+import { Scenario, DecisionOption, Decision } from '../scenarios/scenario.tsx'
 import '../styles/Decisions.css';
-
-// Types for the decision options and decisions
-export type Scenario = {
-    title: string;
-    description: string;
-};
-
-type DecisionOption = {
-    character: string;
-    description: string;
-    imageUrl: string;
-};
-
-export type Decision = {
-    id: string;
-    title: string;
-    description: string;
-    options: [DecisionOption, DecisionOption];
-    selectedOptionIndex?: number;
-};
 
 // Props for the individual components
 type DecisionOptionProps = {

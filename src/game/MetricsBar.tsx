@@ -1,12 +1,6 @@
 import React from 'react';
+import { Metric } from '../scenarios/scenario.tsx'
 import '../styles/MetricsBar.css';
-
-// Define the props the MetricsBar component expects
-export type Metric = {
-    name: string;
-    value: string;
-    explanation: string;
-};
 
 type MetricsBarProps = {
     metrics: Metric[];
