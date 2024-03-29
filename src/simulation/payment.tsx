@@ -8,6 +8,10 @@ export interface PaymentModel {
     run: (vars: Partial<Variables>) => PaymentModelOutput
 }
 
+export const EMPTY_PAYMENT_MODEL_OUTPUT: PaymentModelOutput = {
+    paymentCents: 0,
+}
+
 export function getPaymentModelOutputs(
     vars: Partial<Variables>,
     models: PaymentModel[]

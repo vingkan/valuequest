@@ -8,17 +8,31 @@ type CostByCategory = {
     costCentsDrugs: number
 }
 
+export enum ServiceCategory {
+    Inpatient = 'Inpatient',
+    Outpatient = 'Outpatient',
+    Primary = 'Primary',
+    Specialty = 'Specialty',
+    Drugs = 'Drugs',
+}
+
+export enum RiskLevel {
+    LowRisk = 'LowRisk',
+    MediumRisk = 'MediumRisk',
+    HighRisk = 'HighRisk',
+}
+
 const RISK_LEVELS = [
-    'LowRisk',
-    'MediumRisk',
-    'HighRisk',
+    RiskLevel.LowRisk,
+    RiskLevel.MediumRisk,
+    RiskLevel.HighRisk,
 ]
 const SERVICE_CATEGORIES = [
-    'Inpatient',
-    'Outpatient',
-    'Primary',
-    'Specialty',
-    'Drugs',
+    ServiceCategory.Inpatient,
+    ServiceCategory.Outpatient,
+    ServiceCategory.Primary,
+    ServiceCategory.Specialty,
+    ServiceCategory.Drugs,
 ]
 
 export function getCostCentsByCategory(
