@@ -38,6 +38,7 @@ type DecisionPresentationProps = {
 const DecisionOptionComponent: React.FC<DecisionOptionProps> = ({ option, onChoose, isSelected, position }) => {
     const bubbleClass = `speech-bubble ${position} ${isSelected ? 'selected' : ''}`;
     const optionClass = `option ${position} ${isSelected ? 'selected' : ''}`;
+    const optionLabel = position === 'left' ? 'Yes' : 'No';
 
     return (
         <div className={optionClass}>
@@ -47,7 +48,7 @@ const DecisionOptionComponent: React.FC<DecisionOptionProps> = ({ option, onChoo
             <div className={bubbleClass}>
                 <h4>{option.character}</h4>
                 <p>{option.description}</p>
-                <button onClick={onChoose}>Choose</button>
+                <button onClick={onChoose}>Choose {optionLabel}</button>
             </div>
         </div>
     );
