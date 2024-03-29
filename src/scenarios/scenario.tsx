@@ -22,3 +22,13 @@ export type Metric = {
     value: string;
     explanation: string;
 };
+
+export type Round = {
+    scenario: Scenario;
+    decisions: Decision[];
+};
+
+export type Game = {
+    metrics: Metric[];
+    rounds: Round[];
+};

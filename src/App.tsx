@@ -3,18 +3,15 @@ import React, { useState } from 'react';
 import { MetricsBar } from './game/MetricsBar.tsx';
 import { IsometricGameMap } from './game/GameMap.tsx';
 import { DecisionPresentation } from './game/Decisions.tsx';
-import { Metric, Decision } from './scenarios/scenario.tsx'
-import {
-    initialMetrics,
-    scenario,
-    initialDecisions,
-} from './scenarios/demo.tsx';
+import { Game, Metric, Decision } from './scenarios/scenario.tsx'
 
-const App: React.FC = () => {
-    const [metrics, setMetrics] = useState<Metric[]>(initialMetrics);
+type AppProps = {
+    game: Game
+}
+
+const App: React.FC<AppProps> = ({ game }) => {
+    const [metrics, setMetrics] = useState<Metric[]>(game.metrics);
     const [currentTurn, setCurrentTurn] = useState(1);
-    // Placeholder for game map state, details depend on Three.js objects
-    const [gameMap, setGameMap] = useState({});
 
     // Function to apply a decision's impact to the metrics
     const applyDecision = (decision: Decision) => {
@@ -32,7 +29,10 @@ const App: React.FC = () => {
     };
 
     // Additional state for managing decisions might be needed
-    const [decisions, setDecisions] = useState<Decision[]>(initialDecisions);
+    const [roundIndex, setRoundIndex] = useState<number>(0);
+    const round = game.rounds?.[roundIndex]!
+
+    const [decisions, setDecisions] = useState<Decision[]>(round.decisions);
 
     // Handler for making a decision
     const handleMakeDecision = (decisionId: string, optionIndex: number) => {
@@ -59,7 +59,7 @@ const App: React.FC = () => {
             </div>
             <div className="decision-section">
                 <DecisionPresentation
-                    scenario={scenario}
+                    scenario={round.scenario}
                     decisions={decisions}
                     onMakeDecision={handleMakeDecision}
                     onLockDecisions={handleLockDecisions}
