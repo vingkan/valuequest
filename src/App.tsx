@@ -124,6 +124,7 @@ const App: React.FC<AppProps> = ({ game }) => {
             Object.values(game.initialModels),
             true
         );
+        console.log(results);
         updateRoundResults(-1, results);
     }, [game]);
 
@@ -155,6 +156,7 @@ const App: React.FC<AppProps> = ({ game }) => {
             round,
             decisions,
         })
+        console.log(results);
         updateRoundResults(roundIndex, results);
         setRoundIndex(roundIndex + 1);
     };

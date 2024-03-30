@@ -2,7 +2,7 @@ import { Game } from '../scenarios/scenario.tsx'
 import { ALL_SERVICE_CATEGORIES, ServiceCategory } from '../simulation/cost.tsx'
 import { getSimpleFeeForServiceModel } from '../models/fee_for_service.tsx'
 import { getCareCoordinationModel } from '../models/care_coordination.tsx'
-import { getThresholdBonusModel } from '../models/incentives.tsx'
+import { getThresholdBonusModel, ThresholdConfig } from '../models/incentives.tsx'
 
 const initialFeeForServiceModel = getSimpleFeeForServiceModel({
     name: "Fee For Service Reimbursement",
@@ -15,40 +15,43 @@ const initialCareCoordinationModel = getCareCoordinationModel({
     feePerMemberPerMonthCents: 300_00
 })
 
-const getAnnualWellnessVisitIncentive = (isHigherBonus: boolean) => (
+const getAnnualWellnessVisitIncentive = (overrides: Partial<ThresholdConfig>) => (
     getThresholdBonusModel({
         name: "Annual Wellness Visit Bonus",
         measures: {
             primaryCareParticipationRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.95,
-                bonusPerMemberPerYearCents: isHigherBonus ? 1_75 : 1_50,
+                bonusPerMemberPerYearCents: 1_50,
+                ...overrides,
             },
         }
     })
 )
 
-const getReadmissionRateIncentive = (isHigherBonus: boolean) => (
+const getReadmissionRateIncentive = (overrides: Partial<ThresholdConfig>) => (
     getThresholdBonusModel({
         name: "Readmission Rate Bonus",
         measures: {
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: isHigherBonus ? 3_75 : 3_50,
+                bonusPerMemberPerYearCents: 3_50,
+                ...overrides,
             },
         }
     })
 )
 
-const getBrandToGenericBonus = (isHigherBonus: boolean) => (
+const getBrandToGenericBonus = (overrides: Partial<ThresholdConfig>) => (
     getThresholdBonusModel({
         name: "Brand to Generic Bonus",
         measures: {
             genericPrescriptionRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.65,
-                bonusPerMemberPerYearCents: isHigherBonus ? 1_85 : 1_35,
+                bonusPerMemberPerYearCents: 1_35,
+                ...overrides,
             },
         }
     })
@@ -161,9 +164,9 @@ Navigate these decisions to get ready for contract year 2024.
             modelChanges: {
                 ffs: null,
                 ccf: initialCareCoordinationModel,
-                wellness: getAnnualWellnessVisitIncentive(false),
-                readmission: getReadmissionRateIncentive(false),
-                generic: getBrandToGenericBonus(false),
+                wellness: getAnnualWellnessVisitIncentive({}),
+                readmission: getReadmissionRateIncentive({}),
+                generic: getBrandToGenericBonus({}),
             },
             inputMultipliers: {
                 primaryCareParticipationRate: 1.1,
@@ -181,9 +184,15 @@ Navigate these decisions to get ready for contract year 2024.
                             description: 'Approve the deal. More incentives will get them focused on quality.',
                             imageUrl: 'assets/characters/character-2.png',
                             modelChanges: {
-                                wellness: getAnnualWellnessVisitIncentive(true),
-                                readmission: getReadmissionRateIncentive(true),
-                                generic: getBrandToGenericBonus(true),
+                                wellness: getAnnualWellnessVisitIncentive({
+                                    bonusPerMemberPerYearCents: 1_75
+                                }),
+                                readmission: getReadmissionRateIncentive({
+                                    bonusPerMemberPerYearCents: 3_75
+                                }),
+                                generic: getBrandToGenericBonus({
+                                    bonusPerMemberPerYearCents: 1_85
+                                }),
                             },
                             inputMultipliers: {
                                 primaryCareParticipationRate: 1.05,
@@ -255,14 +264,26 @@ Now it's time to prepare for contract year 2025.
                             description: 'Geo would double the number of lives our value-based contracts cover. More revenue for providers, better outcomes for patients, and more growth for our program.',
                             imageUrl: 'assets/characters/character-9.png',
                             modelChanges: {},
-                            inputMultipliers: {}
+                            inputMultipliers: {
+                                memberCount: 2,
+                                primaryCareParticipationRate: 0.6,
+                                // Low risk fraction increases (0.8 to 0.9)
+                                memberRateLowRisk: 1.125,
+                                // Medium risk fraction decreases (0.1 to 0.05)
+                                memberRateMediumRisk: 0.5,
+                                // High risk fraction decreases (0.1 to 0.05)
+                                memberRateHighRisk: 0.5,
+                            }
                         },
                         {
                             character: 'Member Services Coordinator',
                             description: 'Just because a member lives near a doctor doesn\'t mean they\'ll go see them. I am skeptical that this will actually move the needle.',
                             imageUrl: 'assets/characters/character-6.png',
                             modelChanges: {},
-                            inputMultipliers: {}
+                            inputMultipliers: {
+                                memberCount: 1.2,
+                                primaryCareParticipationRate: 1.1,
+                            }
                         }
                     ],
                 },
@@ -275,15 +296,33 @@ Now it's time to prepare for contract year 2025.
                             character: 'Medical Director',
                             description: 'Regional benchmarks feel unfair because you are going up against providers with much more resources. Competing with yourself from last year will be an easier sell.',
                             imageUrl: 'assets/characters/character-11.png',
-                            modelChanges: {},
-                            inputMultipliers: {}
+                            modelChanges: {
+                                wellness: getAnnualWellnessVisitIncentive({
+                                    minimumThreshold: 0.90,
+                                }),
+                                readmission: getReadmissionRateIncentive({
+                                    minimumThreshold: 0.3,
+                                }),
+                                generic: getBrandToGenericBonus({
+                                    minimumThreshold: 0.5,
+                                }),
+                            },
+                            inputMultipliers: {
+                                primaryCareParticipationRate: 1.1,
+                                readmissionRate: 0.95,
+                                genericPrescriptionRate: 1.5,
+                            }
                         },
                         {
                             character: 'Health Economist',
                             description: 'We can adjust the regional benchmarks to consider only "peer" providers who are similar in size. But, adjusting for year-over-year changes could expose us to much more risk.',
                             imageUrl: 'assets/characters/character-10.png',
                             modelChanges: {},
-                            inputMultipliers: {}
+                            inputMultipliers: {
+                                primaryCareParticipationRate: 1.5,
+                                readmissionRate: 1,
+                                genericPrescriptionRate: 1,
+                            }
                         }
                     ],
                 },

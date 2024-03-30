@@ -5,7 +5,7 @@ import {
 } from '../simulation/payment.tsx'
 import { Variables } from '../simulation/variables.tsx'
 
-type ThresholdConfig = {
+export type ThresholdConfig = {
     // Normally, the actual value must be greater than or equal to the threshold
     // to earn the bonus. For reverse measure values, the actual value must be
     // less than or equal to the threshold to earn the bonus.

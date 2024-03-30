@@ -56,12 +56,14 @@ export function simulate(
 
     // Reduced readmission rate helps high risk patients stay healthy
     const reverseReadmissionRate = 1 - readmissionRate
+    // TODO: This might be incorrect, it seems that reducing readmission rate
+    // actually results in worse quality of life for high risk members
     const readmissionReductionQualityImprovementFactorAchieved = (
         reverseReadmissionRate * readmissionReductionQualityImprovementFactor
     )
     const qualityOfLifeHighRisk = (
         readmissionReductionQualityImprovementFactorAchieved
-        * inputs.qualityOfLifeHighRisk
+            * inputs.qualityOfLifeHighRisk
     )
 
     // Calculate factors that affect cost and utilization

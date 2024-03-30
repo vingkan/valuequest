@@ -116,11 +116,12 @@ export function getQualityOfLife(vars: Partial<Variables>): number {
         memberRateMediumRisk = 0,
         memberRateHighRisk = 0,
     } = vars
-    return (
+    const averageQualityOfLife = (
         (qualityOfLifeLowRisk * memberRateLowRisk)
         + (qualityOfLifeMediumRisk * memberRateMediumRisk)
         + (qualityOfLifeHighRisk * memberRateHighRisk)
     )
+    return clampScore(averageQualityOfLife, ZERO_TO_ONE_RANGE)
 }
 
 export function getQualityOfLifeGiniIndex(vars: Partial<Variables>): number {

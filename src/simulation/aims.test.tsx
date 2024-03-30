@@ -130,6 +130,18 @@ test('calculate average quality of life', () => {
     expect(actual).toBe(0.75)
 })
 
+test('calculate average quality of life with mostly low risk members', () => {
+    const actual = getQualityOfLife({
+        qualityOfLifeLowRisk: 0.8,
+        qualityOfLifeMediumRisk: 0.55,
+        qualityOfLifeHighRisk: 0.4,
+        memberRateLowRisk: 0.9,
+        memberRateMediumRisk: 0.05,
+        memberRateHighRisk: 0.05,
+    })
+    expect(actual).toBeCloseTo(0.7675, 5)
+})
+
 test('calculate gini index of quality of life for perfect equality', () => {
     const actual = getQualityOfLifeGiniIndex({
         qualityOfLifeLowRisk: 1,
