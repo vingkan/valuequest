@@ -68,12 +68,26 @@ button {
 
 @media (max-width: 945px) {
 
+    .game-container {
+        --mobile-view-height: 185vh;
+        height: var(--mobile-view-height);
+    }
+
     .metrics-bar-container,
     .decision-section {
         position: relative;
         width: 100%;
         left: 0;
         transform: translateX(0);
+    }
+
+    .decision-section  {
+        position: absolute;
+        bottom: calc(100vh - var(--mobile-view-height));
+    }
+
+    .game-map {
+        height: var(--mobile-view-height);
     }
 
 }

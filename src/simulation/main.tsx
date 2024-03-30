@@ -93,8 +93,11 @@ export function simulate(
     const genericDrugPerceptionFactorAchieved = (
         genericPrescriptionRate * genericDrugPerceptionFactor
     )
+    const genericDrugCostAversionModifier = (
+        1 - genericDrugPerceptionFactorAchieved
+    )
     const costAversionFactor = (
-        genericDrugPerceptionFactorAchieved * inputs.costAversionFactor
+        genericDrugCostAversionModifier * inputs.costAversionFactor
     )
 
     // Calculate costs
