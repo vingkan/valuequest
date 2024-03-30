@@ -68,6 +68,8 @@ export type Outputs = {
     providerSatisfaction: number
     // Health Equity = Gini Index of Quality of Life Score (0-1)
     qualityOfLifeGiniIndex: number
+    // Health Equity = Palma Ratio of Quality of Life Score (0-1)
+    qualityOfLifePalmaFraction: number
 }
 
 export type Variables = Inputs & Outputs

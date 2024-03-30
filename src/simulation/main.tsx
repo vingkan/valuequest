@@ -4,6 +4,7 @@ import {
     getCentsPerMemberPerMonth,
     getProviderSatisfaction,
     getQualityOfLifeGiniIndex,
+    getQualityOfLifePalmaFraction,
 } from './aims.tsx'
 import {
     getCostCentsByCategory,
@@ -148,8 +149,12 @@ export function simulate(
         desiredReimbursementCents,
         actualReimbursementCents,
     })
-    // TODO: We might need a better health equity metric...
     const qualityOfLifeGiniIndex = getQualityOfLifeGiniIndex({
+        ...inputs,
+        qualityOfLifeLowRisk,
+        qualityOfLifeHighRisk,
+    })
+    const qualityOfLifePalmaFraction = getQualityOfLifePalmaFraction({
         ...inputs,
         qualityOfLifeLowRisk,
         qualityOfLifeHighRisk,
@@ -163,6 +168,7 @@ export function simulate(
         centsPerMemberPerMonth,
         providerSatisfaction,
         qualityOfLifeGiniIndex,
+        qualityOfLifePalmaFraction,
     }
     const results =  {...inputs, ...outputs }
     return results

@@ -1,4 +1,4 @@
-import { getGiniIndex } from './gini.tsx'
+import { getGiniIndex, getPalmaFraction } from './inequity.tsx'
 import { Variables } from './variables.tsx'
 
 const MONTHS_PER_YEAR = 12
@@ -135,6 +135,27 @@ export function getQualityOfLifeGiniIndex(vars: Partial<Variables>): number {
         qualityOfLifeMediumRisk,
         qualityOfLifeHighRisk,
     ])
+}
+
+export function getQualityOfLifePalmaFraction(vars: Partial<Variables>): number {
+    const {
+        qualityOfLifeLowRisk = 0,
+        qualityOfLifeMediumRisk = 0,
+        qualityOfLifeHighRisk = 0,
+        memberRateLowRisk = 0,
+        memberRateMediumRisk = 0,
+        memberRateHighRisk = 0,
+    } = vars
+    return getPalmaFraction({
+        qualityOfLifeLowRisk,
+        qualityOfLifeMediumRisk,
+        qualityOfLifeHighRisk,
+        memberRateLowRisk,
+        memberRateMediumRisk,
+        memberRateHighRisk,
+        minQualityOfLife: 0,
+        maxQualityOfLife: 1,
+    })
 }
 
 export function getCentsPerMemberPerMonth(vars: Partial<Variables>): number {

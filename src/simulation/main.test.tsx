@@ -65,6 +65,7 @@ test('run simulation with no payment models', () => {
         qualityOfLife: 1,
         // All groups have the same quality of life, so we have perfect equality
         qualityOfLifeGiniIndex: 0,
+        qualityOfLifePalmaFraction: 1,
     })
 })
 
@@ -135,5 +136,6 @@ test('run simulation with one simple payment model', () => {
         qualityOfLife: 1,
         // All groups have the same quality of life, so we have perfect equality
         qualityOfLifeGiniIndex: 0,
+        qualityOfLifePalmaFraction: 1,
     })
 })
