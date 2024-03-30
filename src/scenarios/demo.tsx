@@ -1,15 +1,11 @@
 import { Game } from '../scenarios/scenario.tsx'
-import { PaymentModel } from '../simulation/payment.tsx'
-import { Variables } from '../simulation/variables.tsx'
+import { ALL_SERVICE_CATEGORIES, ServiceCategory } from '../simulation/cost.tsx'
+import { getSimpleFeeForServiceModel } from '../models/fee_for_service.tsx'
 
-const initialFeeForServiceModel: PaymentModel = {
-    run: (vars: Partial<Variables>) => {
-        const { desiredReimbursementCents = 0 } = vars
-        const reimbursementRate = 0.8
-        const paymentCents = reimbursementRate * desiredReimbursementCents
-        return { paymentCents }
-    },
-}
+const initialFeeForServiceModel = getSimpleFeeForServiceModel({
+    reimbursementRate: 0.8,
+    includedCategories: ALL_SERVICE_CATEGORIES,
+})
 
 export const DEMO_GAME: Game = {
     metrics: [

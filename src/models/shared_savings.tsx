@@ -4,6 +4,7 @@ import {
     PaymentModelOutput,
 } from '../simulation/payment.tsx'
 import { Variables } from '../simulation/variables.tsx'
+import { CategoryCostVariables, getActualSpend } from './helpers.tsx'
 
 type SharedSavingsParams = {
     targetSpendCentsPerMemberPerYear: number
@@ -13,13 +14,8 @@ type SharedSavingsParams = {
     includedCategories: ServiceCategory[]
 }
 
-type SharedSavingsInputs = Partial<Variables> & {
+type SharedSavingsInputs = Partial<Variables> & CategoryCostVariables & {
     memberCount: number
-    costCentsInpatient: number
-    costCentsOutpatient: number
-    costCentsPrimary: number
-    costCentsSpecialty: number
-    costCentsDrugs: number
 }
 
 export function getSimpleSharedSavingsModel({
@@ -40,11 +36,7 @@ export function getSimpleSharedSavingsModel({
         const { memberCount } = vars
 
         // Calculate actual spend
-        const actualSpendCents = includedCategories.reduce((sum, category) => {
-            const costName = `costCents${category}`
-            const costCents = vars?.[costName] || 0
-            return sum + costCents
-        }, 0)
+        const actualSpendCents = getActualSpend(vars, includedCategories)
 
         // Calculate target spend
         const targetSpendCents = targetSpendCentsPerMemberPerYear * memberCount

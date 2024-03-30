@@ -16,6 +16,14 @@ export enum ServiceCategory {
     Drugs = 'Drugs',
 }
 
+export const ALL_SERVICE_CATEGORIES: ServiceCategory[] = [
+    ServiceCategory.Inpatient,
+    ServiceCategory.Outpatient,
+    ServiceCategory.Primary,
+    ServiceCategory.Specialty,
+    ServiceCategory.Drugs,
+]
+
 export enum RiskLevel {
     LowRisk = 'LowRisk',
     MediumRisk = 'MediumRisk',
