@@ -22,8 +22,8 @@ const SINGLE_PERCENT = 1;
 const DOLLARS_FORMATTER = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
 });
 
 const DEFAULT_FORMATTER: Formatter = (value: any) => `${value}`;
@@ -49,12 +49,16 @@ function getIsBetter(
     prior: number,
     higherIsBetter: boolean
 ): boolean | null {
-    const change = current - prior;
-    if (change === null) return null;
-    if (change === 0) return null;
+    const percentageChange = getPercentageChange(current, prior);
+    if (percentageChange === null) return null;
+    if (percentageChange === 0) return null;
 
-    const isHigher = change > 0;
+    const isHigher = percentageChange > 0;
     const isBetter = isHigher === higherIsBetter;
+
+    const absChange = Math.abs(percentageChange);
+    const isSmall = absChange < SINGLE_PERCENT;
+    if (isSmall) return null;
 
     return isBetter;
 }
@@ -71,7 +75,15 @@ function getTrend(
     const absChange = Math.abs(percentageChange);
     const isHigher = percentageChange > 0;
     const isBetter = getIsBetter(current, prior, higherIsBetter);
-    const amount = absChange < SINGLE_PERCENT ? "<1" : absChange.toFixed(0);
+
+    if (isBetter === null) {
+        const isHigher = percentageChange > 0;
+        const isImprovement = isHigher === higherIsBetter;
+        const direction = isImprovement ? "better" : "worse";
+        return `<${SINGLE_PERCENT}% ${direction}`
+    }
+
+    const amount = absChange.toFixed(0);
     const direction = isBetter ? "better" : "worse";
     const highEmoji = isHigher ? "📈" : "📉";
     const goodEmoji = isBetter ? "👍" : "👎";

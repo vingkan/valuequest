@@ -24,7 +24,7 @@ const FINAL_ROUND: Round = {
         description: '',
     },
     modelChanges: {},
-    inputMultipliers: {},
+    inputModifiers: {},
     decisions: [],
 };
 
@@ -59,24 +59,25 @@ function simulateRound({
             .filter(d => d !== null)
     ) as PaymentModel[];
 
-    const allMultipliers = [
-        round.inputMultipliers,
-        ...selectedOptions.map(d => d.inputMultipliers),
+    const allModifiers = [
+        round.inputModifiers,
+        ...selectedOptions.map(d => d.inputModifiers),
     ];
-    const combinedMultipliers = allMultipliers.reduce((agg, modifiers) => {
+    const combinedModifiers = allModifiers.reduce((agg, modifiers) => {
         let product = { ...agg };
         Object.entries(modifiers).forEach(([key, value]) => {
             if (!(key in product)) {
                 product[key] = value
             } else {
-                product[key] = product[key] * value
+                product[key] = product[key] + value
             }
         });
         return product;
     }, {});
     let modifiedInputs = { ...inputs };
-    Object.entries(combinedMultipliers).forEach(([key, value]) => {
-        modifiedInputs[key] = modifiedInputs[key] * value
+    Object.entries(combinedModifiers).forEach(([key, modifier]) => {
+        const factor = 1 + modifier
+        modifiedInputs[key] = modifiedInputs[key] * factor
     });
 
     const results = simulate(modifiedInputs, modifiedModels, true);

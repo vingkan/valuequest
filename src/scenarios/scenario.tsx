@@ -13,12 +13,18 @@ export type Scenario = {
 // If a model ID existed before and there are no new changes, it will remain
 export type PaymentModelMap = Record<string, PaymentModel | null>;
 
+// Each value represents the percentage change to be added to the input.
+// All changes are additive. For example, if the round provides a change of 0.01
+// and the decision option provides a change of -0.05, the result will be -0.04
+// for a negative 4% change in the input variable value after all modifiers.
+export type InputModifiers = Partial<Inputs>;
+
 export type DecisionOption = {
     character: string;
     description: string;
     imageUrl: string;
     modelChanges: PaymentModelMap;
-    inputMultipliers: Partial<Inputs>;
+    inputModifiers: InputModifiers;
 };
 
 export type Decision = {
@@ -43,7 +49,7 @@ export type Round = {
     scenario: Scenario;
     decisions: Decision[];
     modelChanges: PaymentModelMap;
-    inputMultipliers: Partial<Inputs>;
+    inputModifiers: InputModifiers;
 };
 
 export type Game = {

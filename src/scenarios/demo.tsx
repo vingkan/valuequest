@@ -12,7 +12,7 @@ const initialFeeForServiceModel = getSimpleFeeForServiceModel({
 
 const initialCareCoordinationModel = getCareCoordinationModel({
     name: "Care Coordination Fee",
-    feePerMemberPerMonthCents: 300_00
+    feePerMemberPerMonthCents: 306_00
 })
 
 const getAnnualWellnessVisitIncentive = (overrides: Partial<ThresholdConfig>) => (
@@ -21,7 +21,7 @@ const getAnnualWellnessVisitIncentive = (overrides: Partial<ThresholdConfig>) =>
         measures: {
             primaryCareParticipationRate: {
                 isReverseMeasure: false,
-                minimumThreshold: 0.95,
+                minimumThreshold: 0.90,
                 bonusPerMemberPerMonthCents: 2_50,
                 ...overrides,
             },
@@ -164,15 +164,14 @@ Navigate these decisions to get ready for contract year 2024.
             modelChanges: {
                 ffs: null,
                 ccf: initialCareCoordinationModel,
+                // Need +0.1 modifier to hit this target
                 wellness: getAnnualWellnessVisitIncentive({}),
+                // Need -0.2 modifier to hit this target
                 readmission: getReadmissionRateIncentive({}),
+                // Need +2.25 modifier to hit this target
                 generic: getBrandToGenericBonus({}),
             },
-            inputMultipliers: {
-                primaryCareParticipationRate: 1.01,
-                readmissionRate: 0.99,
-                genericPrescriptionRate: 2,
-            },
+            inputModifiers: {},
             decisions: [
                 {
                     id: 'offer-more-contract-incentives',
@@ -194,10 +193,10 @@ Navigate these decisions to get ready for contract year 2024.
                                     bonusPerMemberPerMonthCents: 3_50
                                 }),
                             },
-                            inputMultipliers: {
-                                primaryCareParticipationRate: 1.01,
-                                readmissionRate: 0.99,
-                                genericPrescriptionRate: 1.5,
+                            inputModifiers: {
+                                primaryCareParticipationRate: 0.1,
+                                readmissionRate: -0.2,
+                                genericPrescriptionRate: 2.25,
                             }
                         },
                         {
@@ -205,10 +204,10 @@ Navigate these decisions to get ready for contract year 2024.
                             description: 'Are you crazy? They already have enough upside! Reject the deal.',
                             imageUrl: 'assets/characters/character-1.png',
                             modelChanges: {},
-                            inputMultipliers: {
-                                primaryCareParticipationRate: 0.99,
-                                readmissionRate: 1.01,
-                                genericPrescriptionRate: 0.75,
+                            inputModifiers: {
+                                primaryCareParticipationRate: 0.08,
+                                readmissionRate: -0.02,
+                                genericPrescriptionRate: 1,
                             }
                         }
                     ]
@@ -223,9 +222,9 @@ Navigate these decisions to get ready for contract year 2024.
                             description: 'Without this documentation, we could be opening up both ourselves and the provider to fraud allegations.',
                             imageUrl: 'assets/characters/character-16.png',
                             modelChanges: {},
-                            inputMultipliers: {
-                                providerAutonomyFactor: 0.99,
-                                providerReportingBurden: 1.02,
+                            inputModifiers: {
+                                providerAutonomyFactor: -0.1,
+                                providerReportingBurden: 0.2,
                             }
                         },
                         {
@@ -233,10 +232,10 @@ Navigate these decisions to get ready for contract year 2024.
                             description: 'This imposes unnecessary burden on providers. They will just see it as more red tape blocking their reimbursement.',
                             imageUrl: 'assets/characters/character-11.png',
                             modelChanges: {},
-                            inputMultipliers: {
-                                primaryCareParticipationRate: 1.01,
-                                providerAutonomyFactor: 1.01,
-                                providerReportingBurden: 0.94,
+                            inputModifiers: {
+                                primaryCareParticipationRate: 0.02,
+                                providerAutonomyFactor: 0.02,
+                                providerReportingBurden: -0.06,
                             }
                         }
                     ],
@@ -253,7 +252,7 @@ Now it's time to prepare for contract year 2025.
                 `,
             },
             modelChanges: {},
-            inputMultipliers: {},
+            inputModifiers: {},
             decisions: [
                 {
                     id: 'expand-geo-attribution',
@@ -265,15 +264,15 @@ Now it's time to prepare for contract year 2025.
                             description: 'Geo would double the number of lives our value-based contracts cover. More revenue for providers, better outcomes for patients, and more growth for our program.',
                             imageUrl: 'assets/characters/character-9.png',
                             modelChanges: {},
-                            inputMultipliers: {
-                                memberCount: 2,
-                                primaryCareParticipationRate: 0.6,
+                            inputModifiers: {
+                                memberCount: 1,
+                                primaryCareParticipationRate: -0.4,
                                 // Low risk fraction increases (0.8 to 0.9)
-                                memberRateLowRisk: 1.125,
+                                memberRateLowRisk: 0.125,
                                 // Medium risk fraction decreases (0.1 to 0.05)
-                                memberRateMediumRisk: 0.5,
+                                memberRateMediumRisk: -0.5,
                                 // High risk fraction decreases (0.1 to 0.05)
-                                memberRateHighRisk: 0.5,
+                                memberRateHighRisk: -0.5,
                             }
                         },
                         {
@@ -281,9 +280,9 @@ Now it's time to prepare for contract year 2025.
                             description: 'Just because a member lives near a doctor doesn\'t mean they\'ll go see them. I am skeptical that this will actually move the needle.',
                             imageUrl: 'assets/characters/character-6.png',
                             modelChanges: {},
-                            inputMultipliers: {
-                                memberCount: 1.2,
-                                primaryCareParticipationRate: 1.01,
+                            inputModifiers: {
+                                memberCount: 0.2,
+                                primaryCareParticipationRate: 0.01,
                             }
                         }
                     ],
@@ -308,10 +307,10 @@ Now it's time to prepare for contract year 2025.
                                     minimumThreshold: 0.5,
                                 }),
                             },
-                            inputMultipliers: {
-                                primaryCareParticipationRate: 1.01,
-                                readmissionRate: 0.97,
-                                genericPrescriptionRate: 1.5,
+                            inputModifiers: {
+                                primaryCareParticipationRate: 0.01,
+                                readmissionRate: -0.03,
+                                genericPrescriptionRate: 0.05,
                             }
                         },
                         {
@@ -319,10 +318,10 @@ Now it's time to prepare for contract year 2025.
                             description: 'We can adjust the regional benchmarks to consider only "peer" providers who are similar in size. But, adjusting for year-over-year changes could expose us to much more risk.',
                             imageUrl: 'assets/characters/character-10.png',
                             modelChanges: {},
-                            inputMultipliers: {
-                                primaryCareParticipationRate: 1.05,
-                                readmissionRate: 1,
-                                genericPrescriptionRate: 1,
+                            inputModifiers: {
+                                primaryCareParticipationRate: 0.05,
+                                readmissionRate: 0,
+                                genericPrescriptionRate: 0,
                             }
                         }
                     ],
