@@ -60,7 +60,9 @@ test('run simulation with no payment models', () => {
         // Zero reimbursement, but other factors are perfect -> 0.5 overall
         providerSatisfaction: 0.5,
         // $2400 / 10 members = $240 / 12 months = $20 pmpm
-        centsPerMemberPerMonth: 2000,
+        incurredCentsPerMemberPerMonth: 2000,
+        // No payments, no spend
+        paidCentsPerMemberPerMonth: 0,
         // All groups have the best quality of life
         qualityOfLife: 1,
         // All groups have the same quality of life, so we have perfect equality
@@ -131,7 +133,9 @@ test('run simulation with one simple payment model', () => {
         // Half reimbursement and other factors are perfect -> 0.75 overall
         providerSatisfaction: 0.75,
         // $2400 / 10 members = $240 / 12 months = $20 pmpm
-        centsPerMemberPerMonth: 2000,
+        incurredCentsPerMemberPerMonth: 2000,
+        // $1200 / 10 members = $120 / 12 months = $10 pmpm
+        paidCentsPerMemberPerMonth: 1000,
         // All groups have the best quality of life
         qualityOfLife: 1,
         // All groups have the same quality of life, so we have perfect equality

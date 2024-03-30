@@ -63,10 +63,17 @@ button {
     box-sizing: border-box;
     width: 100%;
     max-width: 1200px;
+}
+
+.metrics-bar-container {
+    z-index: 2;
+}
+
+.decision-section {
     z-index: 1;
 }
 
-@media (max-width: 945px) {
+@media (max-width: 915px) {
 
     .game-container {
         --mobile-view-height: 185vh;

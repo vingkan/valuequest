@@ -83,9 +83,9 @@
 .profile-image-container {
     flex-shrink: 0;
     /* Prevent the container from shrinking */
-    width: 150px;
+    width: 130px;
     /* Fixed width for the container */
-    height: 150px;
+    height: 130px;
     /* Fixed height to maintain aspect ratio */
     margin: 0 20px;
     /* Adjust margin for spacing */
@@ -254,7 +254,7 @@
     margin: 10px auto;
 }
 
-@media (min-width: 945px) {
+@media (min-width: 915px) {
 
     .decision-section {
         min-height: 45vh;
@@ -262,7 +262,7 @@
 
 }
 
-@media (max-width: 945px) {
+@media (max-width: 915px) {
 
     .options {
         flex-direction: column;

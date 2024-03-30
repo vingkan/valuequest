@@ -179,24 +179,17 @@ test('calculate gini index of quality of life for perfect inequality', () => {
 })
 
 test('calculate pmpm in cents', () => {
-    const actual = getCentsPerMemberPerMonth({
-        memberCount: 10,
-        desiredReimbursementCents: 2400,
-    })
+    const actual = getCentsPerMemberPerMonth(2400, 10)
     // 2400 / 10 = 240 / 12 = 20
     expect(actual).toBe(20)
 })
 
 test('no members, no pmpm', () => {
-    const actual = getCentsPerMemberPerMonth({
-        desiredReimbursementCents: 2400,
-    })
+    const actual = getCentsPerMemberPerMonth(2400, 0)
     expect(actual).toBe(0)
 })
 
 test('no cost, no pmpm', () => {
-    const actual = getCentsPerMemberPerMonth({
-        memberCount: 10,
-    })
+    const actual = getCentsPerMemberPerMonth(0, 10)
     expect(actual).toBe(0)
 })

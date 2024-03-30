@@ -5,13 +5,15 @@ import {
 } from '../simulation/payment.tsx'
 import { Variables } from '../simulation/variables.tsx'
 
+const MONTHS_PER_YEAR = 12
+
 export type ThresholdConfig = {
     // Normally, the actual value must be greater than or equal to the threshold
     // to earn the bonus. For reverse measure values, the actual value must be
     // less than or equal to the threshold to earn the bonus.
     isReverseMeasure: boolean
     minimumThreshold: number
-    bonusPerMemberPerYearCents: number
+    bonusPerMemberPerMonthCents: number
 }
 
 type ThresholdBonusParams = PaymentModelParams & {
@@ -37,7 +39,8 @@ export function getThresholdBonusModel({
                     ? value <= config.minimumThreshold
                     : value >= config.minimumThreshold
             )
-            const bonus = metThreshold ? config.bonusPerMemberPerYearCents : 0
+            const pmpy = MONTHS_PER_YEAR * config.bonusPerMemberPerMonthCents
+            const bonus = metThreshold ? pmpy : 0
             const paymentCents = bonus * memberCount
             return paymentCents
         })

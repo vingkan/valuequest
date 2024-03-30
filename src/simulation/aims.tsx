@@ -158,14 +158,13 @@ export function getQualityOfLifePalmaFraction(vars: Partial<Variables>): number 
     })
 }
 
-export function getCentsPerMemberPerMonth(vars: Partial<Variables>): number {
-    const {
-        memberCount,
-        desiredReimbursementCents
-    } = vars
-    if (!memberCount || !desiredReimbursementCents) return 0
+export function getCentsPerMemberPerMonth(
+    centsPerYear: number,
+    membersPerYear: number,
+): number {
+    if (!membersPerYear || !centsPerYear) return 0
 
-    const centsPerMemberPerYear = desiredReimbursementCents / memberCount
+    const centsPerMemberPerYear = centsPerYear / membersPerYear
     const centsPerMemberPerMonth = centsPerMemberPerYear / MONTHS_PER_YEAR
     return Math.floor(centsPerMemberPerMonth)
 }

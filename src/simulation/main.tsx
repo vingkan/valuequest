@@ -140,10 +140,14 @@ export function simulate(
         qualityOfLifeLowRisk,
         qualityOfLifeHighRisk,
     })
-    const centsPerMemberPerMonth = getCentsPerMemberPerMonth({
-        ...inputs,
+    const incurredCentsPerMemberPerMonth = getCentsPerMemberPerMonth(
         desiredReimbursementCents,
-    })
+        memberCount
+    )
+    const paidCentsPerMemberPerMonth = getCentsPerMemberPerMonth(
+        actualReimbursementCents,
+        memberCount
+    )
     const providerSatisfaction = getProviderSatisfaction({
         ...inputs,
         desiredReimbursementCents,
@@ -165,7 +169,8 @@ export function simulate(
         actualReimbursementCents,
         memberSatisfaction,
         qualityOfLife,
-        centsPerMemberPerMonth,
+        incurredCentsPerMemberPerMonth,
+        paidCentsPerMemberPerMonth,
         providerSatisfaction,
         qualityOfLifeGiniIndex,
         qualityOfLifePalmaFraction,

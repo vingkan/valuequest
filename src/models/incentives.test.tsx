@@ -8,7 +8,7 @@ test('calculate bonus payment for one passing measure', () => {
             medicationAdheranceRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.7,
-                bonusPerMemberPerYearCents: 1700,
+                bonusPerMemberPerMonthCents: 1000,
             }
         }
     })
@@ -16,7 +16,7 @@ test('calculate bonus payment for one passing measure', () => {
         memberCount: 10,
         medicationAdheranceRate: 0.8,
     })
-    expect(actual).toStrictEqual({ paymentCents: 17000, name: 'bonus' })
+    expect(actual).toStrictEqual({ paymentCents: 120000, name: 'bonus' })
 })
 
 test('calculate bonus payment for one barely passing measure', () => {
@@ -26,7 +26,7 @@ test('calculate bonus payment for one barely passing measure', () => {
             medicationAdheranceRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.7,
-                bonusPerMemberPerYearCents: 1700,
+                bonusPerMemberPerMonthCents: 1000,
             }
         }
     })
@@ -34,7 +34,7 @@ test('calculate bonus payment for one barely passing measure', () => {
         memberCount: 10,
         medicationAdheranceRate: 0.7,
     })
-    expect(actual).toStrictEqual({ paymentCents: 17000, name: 'bonus' })
+    expect(actual).toStrictEqual({ paymentCents: 120000, name: 'bonus' })
 })
 
 test('calculate bonus payment for one failing measure', () => {
@@ -44,7 +44,7 @@ test('calculate bonus payment for one failing measure', () => {
             medicationAdheranceRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.7,
-                bonusPerMemberPerYearCents: 1700,
+                bonusPerMemberPerMonthCents: 1000,
             }
         }
     })
@@ -62,7 +62,7 @@ test('calculate bonus payment for one passing reverse measure', () => {
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: 3400,
+                bonusPerMemberPerMonthCents: 2000,
             }
         }
     })
@@ -70,7 +70,7 @@ test('calculate bonus payment for one passing reverse measure', () => {
         memberCount: 10,
         readmissionRate: 0.1,
     })
-    expect(actual).toStrictEqual({ paymentCents: 34000, name: 'bonus' })
+    expect(actual).toStrictEqual({ paymentCents: 240000, name: 'bonus' })
 })
 
 test('calculate bonus payment for one barely passing reverse measure', () => {
@@ -80,7 +80,7 @@ test('calculate bonus payment for one barely passing reverse measure', () => {
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: 3400,
+                bonusPerMemberPerMonthCents: 2000,
             }
         }
     })
@@ -88,7 +88,7 @@ test('calculate bonus payment for one barely passing reverse measure', () => {
         memberCount: 10,
         readmissionRate: 0.25,
     })
-    expect(actual).toStrictEqual({ paymentCents: 34000, name: 'bonus' })
+    expect(actual).toStrictEqual({ paymentCents: 240000, name: 'bonus' })
 })
 
 test('calculate bonus payment for one failing reverse measure', () => {
@@ -98,7 +98,7 @@ test('calculate bonus payment for one failing reverse measure', () => {
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: 3400,
+                bonusPerMemberPerMonthCents: 2000,
             }
         }
     })
@@ -116,12 +116,12 @@ test('calculate bonus payment for multiple passing measures', () => {
             medicationAdheranceRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.7,
-                bonusPerMemberPerYearCents: 1700,
+                bonusPerMemberPerMonthCents: 1000,
             },
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: 3400,
+                bonusPerMemberPerMonthCents: 2000,
             }
         }
     })
@@ -130,7 +130,7 @@ test('calculate bonus payment for multiple passing measures', () => {
         medicationAdheranceRate: 0.9,
         readmissionRate: 0.15,
     })
-    expect(actual).toStrictEqual({ paymentCents: 51000, name: 'bonus' })
+    expect(actual).toStrictEqual({ paymentCents: 360000, name: 'bonus' })
 })
 
 test('calculate bonus payment for some passing measures', () => {
@@ -140,12 +140,12 @@ test('calculate bonus payment for some passing measures', () => {
             medicationAdheranceRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.7,
-                bonusPerMemberPerYearCents: 1700,
+                bonusPerMemberPerMonthCents: 1000,
             },
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: 3400,
+                bonusPerMemberPerMonthCents: 2000,
             }
         }
     })
@@ -154,7 +154,7 @@ test('calculate bonus payment for some passing measures', () => {
         medicationAdheranceRate: 0.4,
         readmissionRate: 0.15,
     })
-    expect(actual).toStrictEqual({ paymentCents: 34000, name: 'bonus' })
+    expect(actual).toStrictEqual({ paymentCents: 240000, name: 'bonus' })
 })
 
 test('no members, no payment', () => {
@@ -164,7 +164,7 @@ test('no members, no payment', () => {
             medicationAdheranceRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.7,
-                bonusPerMemberPerYearCents: 1700,
+                bonusPerMemberPerMonthCents: 1000,
             }
         }
     })

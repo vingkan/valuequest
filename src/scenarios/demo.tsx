@@ -22,7 +22,7 @@ const getAnnualWellnessVisitIncentive = (overrides: Partial<ThresholdConfig>) =>
             primaryCareParticipationRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.95,
-                bonusPerMemberPerYearCents: 1_50,
+                bonusPerMemberPerMonthCents: 2_50,
                 ...overrides,
             },
         }
@@ -36,7 +36,7 @@ const getReadmissionRateIncentive = (overrides: Partial<ThresholdConfig>) => (
             readmissionRate: {
                 isReverseMeasure: true,
                 minimumThreshold: 0.25,
-                bonusPerMemberPerYearCents: 3_50,
+                bonusPerMemberPerMonthCents: 4_50,
                 ...overrides,
             },
         }
@@ -50,7 +50,7 @@ const getBrandToGenericBonus = (overrides: Partial<ThresholdConfig>) => (
             genericPrescriptionRate: {
                 isReverseMeasure: false,
                 minimumThreshold: 0.65,
-                bonusPerMemberPerYearCents: 1_35,
+                bonusPerMemberPerMonthCents: 2_65,
                 ...overrides,
             },
         }
@@ -76,10 +76,10 @@ export const DEMO_GAME: Game = {
             value: 0,
         },
         {
-            name: "Cost PMPM",
-            variable: "centsPerMemberPerMonth",
+            name: "Spend PMPM",
+            variable: "paidCentsPerMemberPerMonth",
             higherIsBetter: false,
-            explanation: "Lower is better. Average cost of all covered services per member per month. Inflation-adjusted.",
+            explanation: "Lower is better. Average payer spend on covered services per member per month. Inflation-adjusted.",
             formatId: "cents_to_dollars",
             value: 0,
         },
@@ -185,13 +185,13 @@ Navigate these decisions to get ready for contract year 2024.
                             imageUrl: 'assets/characters/character-2.png',
                             modelChanges: {
                                 wellness: getAnnualWellnessVisitIncentive({
-                                    bonusPerMemberPerYearCents: 1_75
+                                    bonusPerMemberPerMonthCents: 3_00
                                 }),
                                 readmission: getReadmissionRateIncentive({
-                                    bonusPerMemberPerYearCents: 3_75
+                                    bonusPerMemberPerMonthCents: 5_75
                                 }),
                                 generic: getBrandToGenericBonus({
-                                    bonusPerMemberPerYearCents: 1_85
+                                    bonusPerMemberPerMonthCents: 3_50
                                 }),
                             },
                             inputMultipliers: {
@@ -234,6 +234,7 @@ Navigate these decisions to get ready for contract year 2024.
                             imageUrl: 'assets/characters/character-11.png',
                             modelChanges: {},
                             inputMultipliers: {
+                                primaryCareParticipationRate: 1.4,
                                 providerAutonomyFactor: 1.1,
                                 providerReportingBurden: 0.6,
                             }

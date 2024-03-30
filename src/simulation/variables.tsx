@@ -63,7 +63,9 @@ export type Outputs = {
     // Health Outcomes = Quality of Life Score (0-1)
     qualityOfLife: number
     // Cost of Healthcare = Average Cost Per Member Per Month ($)
-    centsPerMemberPerMonth: number
+    incurredCentsPerMemberPerMonth: number
+    // Cost of Healthcare = Average Spend Per Member Per Month ($)
+    paidCentsPerMemberPerMonth: number
     // Provider Experience = Provider Satisfaction Score (0-1)
     providerSatisfaction: number
     // Health Equity = Gini Index of Quality of Life Score (0-1)

@@ -37,7 +37,6 @@
 
     /* Positioning */
     position: absolute;
-    z-index: 1;
     top: 110px;
     /* Adjust based on your layout */
     left: 50%;
@@ -82,16 +81,17 @@
 .metric:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
+    z-index: 3;
 }
 
 .metric-name {
-    font-size: 1em;
+    font-size: 0.95em;
     margin-bottom: 10px;
 }
 
 .metric-value {
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.45em;
 }
 
 .metric .comparator {
@@ -100,7 +100,7 @@
 }
 
 .metric .comparator .delta {
-    font-size: 0.9em;
+    font-size: 0.85em;
     white-space: pre;
 }
 
@@ -116,7 +116,7 @@
     color: var(--color-worse);
 }
 
-@media (max-width: 945px) {
+@media (max-width: 915px) {
 
     .metrics-bar-container {
         flex-direction: column;
