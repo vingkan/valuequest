@@ -140,7 +140,7 @@ export const DEMO_GAME: Game = {
         lengthOfStay: 1,
         readmissionRate: 0.3,
         // Quality Improvement Factors
-        primaryCareQualityImprovementFactor: 1.1,
+        primaryCareQualityImprovementFactor: 1.01,
         readmissionReductionQualityImprovementFactor: 1.05,
         genericDrugPerceptionFactor: 0.8,
         // Provider Factors
@@ -169,8 +169,8 @@ Navigate these decisions to get ready for contract year 2024.
                 generic: getBrandToGenericBonus({}),
             },
             inputMultipliers: {
-                primaryCareParticipationRate: 1.1,
-                readmissionRate: 0.9,
+                primaryCareParticipationRate: 1.01,
+                readmissionRate: 0.99,
                 genericPrescriptionRate: 2,
             },
             decisions: [
@@ -195,9 +195,9 @@ Navigate these decisions to get ready for contract year 2024.
                                 }),
                             },
                             inputMultipliers: {
-                                primaryCareParticipationRate: 1.05,
-                                readmissionRate: 0.88,
-                                genericPrescriptionRate: 3,
+                                primaryCareParticipationRate: 1.01,
+                                readmissionRate: 0.99,
+                                genericPrescriptionRate: 1.5,
                             }
                         },
                         {
@@ -206,8 +206,8 @@ Navigate these decisions to get ready for contract year 2024.
                             imageUrl: 'assets/characters/character-1.png',
                             modelChanges: {},
                             inputMultipliers: {
-                                primaryCareParticipationRate: 0.75,
-                                readmissionRate: 1.1,
+                                primaryCareParticipationRate: 0.99,
+                                readmissionRate: 1.01,
                                 genericPrescriptionRate: 0.75,
                             }
                         }
@@ -224,8 +224,8 @@ Navigate these decisions to get ready for contract year 2024.
                             imageUrl: 'assets/characters/character-16.png',
                             modelChanges: {},
                             inputMultipliers: {
-                                providerAutonomyFactor: 0.9,
-                                providerReportingBurden: 1.2,
+                                providerAutonomyFactor: 0.99,
+                                providerReportingBurden: 1.02,
                             }
                         },
                         {
@@ -234,9 +234,9 @@ Navigate these decisions to get ready for contract year 2024.
                             imageUrl: 'assets/characters/character-11.png',
                             modelChanges: {},
                             inputMultipliers: {
-                                primaryCareParticipationRate: 1.4,
-                                providerAutonomyFactor: 1.1,
-                                providerReportingBurden: 0.6,
+                                primaryCareParticipationRate: 1.01,
+                                providerAutonomyFactor: 1.01,
+                                providerReportingBurden: 0.94,
                             }
                         }
                     ],
@@ -283,7 +283,7 @@ Now it's time to prepare for contract year 2025.
                             modelChanges: {},
                             inputMultipliers: {
                                 memberCount: 1.2,
-                                primaryCareParticipationRate: 1.1,
+                                primaryCareParticipationRate: 1.01,
                             }
                         }
                     ],
@@ -309,8 +309,8 @@ Now it's time to prepare for contract year 2025.
                                 }),
                             },
                             inputMultipliers: {
-                                primaryCareParticipationRate: 1.1,
-                                readmissionRate: 0.95,
+                                primaryCareParticipationRate: 1.01,
+                                readmissionRate: 0.97,
                                 genericPrescriptionRate: 1.5,
                             }
                         },
@@ -320,7 +320,7 @@ Now it's time to prepare for contract year 2025.
                             imageUrl: 'assets/characters/character-10.png',
                             modelChanges: {},
                             inputMultipliers: {
-                                primaryCareParticipationRate: 1.5,
+                                primaryCareParticipationRate: 1.05,
                                 readmissionRate: 1,
                                 genericPrescriptionRate: 1,
                             }

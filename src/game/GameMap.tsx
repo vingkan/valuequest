@@ -1,5 +1,125 @@
-import React from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { useRef, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Mesh } from 'three'
+
+enum Axis {
+  X = "x",
+  Y = "y",
+}
+
+type PacingBoxProps = {
+  size: [number, number, number]
+  position: [number, number, number]
+  color: string
+  initialIsGoingForward: boolean
+  axis: Axis
+  range: [number, number]
+  speed: number
+}
+
+function clampValue(value: number, current: number, next: number) {
+  const max = Math.max(current, next)
+  const min = Math.min(current, next)
+  return Math.min(Math.max(value, min), max)
+}
+
+function PacingBox({
+  size,
+  position,
+  color,
+  initialIsGoingForward,
+  axis,
+  range,
+  speed,
+}: PacingBoxProps) {
+  const meshRef = useRef<Mesh>(null);
+  const [isGoingForward, setIsGoingForward] = useState<boolean>(
+    initialIsGoingForward
+  );
+
+  useFrame((state, delta) => {
+    if (!meshRef.current) return
+
+    const value = meshRef.current.position?.[axis]
+    if (value <= range[0]) {
+      setIsGoingForward(true)
+    } else if (value >= range[1]) {
+      setIsGoingForward(false)
+    }
+    const rate = speed * delta
+    const progress = isGoingForward ? rate : -rate
+    const newValue = value + progress
+    const clampedValue = clampValue(newValue, range[0], range[1])
+    meshRef.current.position[axis] = clampedValue
+  });
+
+  return (
+    <mesh ref={meshRef} position={position} >
+      <boxGeometry args={size} />
+      <meshStandardMaterial color={color} />
+    </mesh>
+  );
+}
+
+enum Direction {
+  UP = "up",
+  DOWN = "down",
+  LEFT = "left",
+  RIGHT = "right"
+}
+
+type LappingBoxProps = {
+  size: [number, number, number]
+  position: [number, number, number]
+  color: string
+  initialDirection: Direction
+  lapSize: number
+  speed: number
+}
+
+function LappingBox({
+  size,
+  position,
+  color,
+  initialDirection,
+  lapSize,
+  speed,
+}: LappingBoxProps) {
+  const meshRef = useRef<Mesh>(null)
+  const [direction, setDirection] = useState<Direction>(initialDirection)
+
+  useFrame((state, delta) => {
+    if (!meshRef.current) return
+
+    switch (direction) {
+      case Direction.RIGHT:
+        meshRef.current.position.x += speed * delta
+        if (meshRef.current.position.x >= lapSize) setDirection(Direction.DOWN)
+        break
+      case Direction.DOWN:
+        meshRef.current.position.y -= speed * delta
+        if (meshRef.current.position.y <= -lapSize) setDirection(Direction.LEFT)
+        break;
+      case Direction.LEFT:
+        meshRef.current.position.x -= speed * delta
+        if (meshRef.current.position.x <= -lapSize) setDirection(Direction.UP)
+        break
+      case Direction.UP:
+        meshRef.current.position.y += speed * delta
+        if (meshRef.current.position.y >= lapSize) setDirection(Direction.RIGHT)
+        break
+      default:
+        setDirection(initialDirection)
+    }
+  })
+
+  return (
+    <mesh ref={meshRef} position={position} >
+      <boxGeometry args={size} />
+      <meshStandardMaterial color={color} />
+    </mesh>
+  )
+}
 
 function Hospital() {
   return (
@@ -61,6 +181,9 @@ function Ground({ position, size, color }) {
 }
 
 export const IsometricGameMap: React.FC = () => {
+  const speed = 3
+  const boxSize = 0.25
+
   return (
     <Canvas
       orthographic
@@ -77,6 +200,23 @@ export const IsometricGameMap: React.FC = () => {
       <Hospital />
       <Tree position={[1.5, -1.5, 0]} />
       <Tree position={[-1.5, -1.5, 0]} />
+      <PacingBox
+        position={[0, -2, boxSize / 2]}
+        size={[boxSize, boxSize, boxSize]}
+        color={"#05477d"}
+        initialIsGoingForward={true}
+        axis={Axis.Y}
+        range={[-4.5, 0]}
+        speed={speed}
+      />
+      <LappingBox
+        position={[-4, 4, boxSize / 2]}
+        size={[boxSize, boxSize, boxSize]}
+        color={"#05477d"}
+        initialDirection={Direction.RIGHT}
+        lapSize={4}
+        speed={speed}
+      />
       <Ground position={[0, 0, 0]} size={[10, 10]} color={"#97fa61"} />
     </Canvas>
   );
