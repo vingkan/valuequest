@@ -3,7 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { MetricsBar } from './game/MetricsBar.tsx';
 import { IsometricGameMap } from './game/GameMap.tsx';
 import { DecisionPresentation } from './game/Decisions.tsx';
-import { Game, Round, Metric, Decision } from './scenarios/scenario.tsx'
+import {
+    Game,
+    Round,
+    Metric,
+    Decision,
+    PaymentModelMap,
+} from './scenarios/scenario.tsx'
+import { Inputs, Variables } from './simulation/variables.tsx'
+import { simulate } from './simulation/main.tsx'
+import { PaymentModel } from './simulation/payment.tsx';
 
 type AppProps = {
     game: Game
@@ -14,11 +23,99 @@ const FINAL_ROUND: Round = {
         title: '',
         description: '',
     },
+    modelChanges: {},
+    inputMultipliers: {},
     decisions: [],
 };
 
+type SimulateRoundProps = {
+    inputs: Inputs;
+    previousModels: PaymentModelMap;
+    round: Round;
+    decisions: Decision[];
+};
+
+function simulateRound({
+    inputs,
+    previousModels,
+    round,
+    decisions,
+}: SimulateRoundProps) {
+    const selectedOptions = decisions.map((decision) => (
+        decision.options?.[decision.selectedOptionIndex!]
+    ));
+
+    const allModelChanges = [
+        previousModels,
+        round.modelChanges,
+        ...selectedOptions.map(d => d.modelChanges),
+    ];
+    const combinedModelChanges = allModelChanges.reduce((agg, modelChanges) => {
+        return { ...agg, ...modelChanges };
+    }, {});
+    const modifiedModels = (
+        Object
+            .values(combinedModelChanges)
+            .filter(d => d !== null)
+    ) as PaymentModel[];
+
+    const allMultipliers = [
+        round.inputMultipliers,
+        ...selectedOptions.map(d => d.inputMultipliers),
+    ];
+    const combinedMultipliers = allMultipliers.reduce((agg, modifiers) => {
+        let product = { ...agg };
+        Object.entries(modifiers).forEach(([key, value]) => {
+            if (!(key in product)) {
+                product[key] = value
+            } else {
+                product[key] = product[key] * value
+            }
+        });
+        return product;
+    }, {});
+    let modifiedInputs = { ...inputs };
+    Object.entries(combinedMultipliers).forEach(([key, value]) => {
+        modifiedInputs[key] = modifiedInputs[key] * value
+    });
+
+    const results = simulate(modifiedInputs, modifiedModels);
+    return results;
+}
+
 const App: React.FC<AppProps> = ({ game }) => {
     const [metrics, setMetrics] = useState<Metric[]>(game.metrics);
+    const [inputs, setInputs] = useState<Inputs>(game.initialInputs);
+    const [models, setModels] = useState<PaymentModelMap>(game.initialModels);
+
+    function updateRoundResults(results: Variables) {
+        setInputs((previousInputs) => {
+            const newInputs = (
+                Object
+                    .keys(previousInputs)
+                    .reduce((agg, key) => ({
+                        ...agg,
+                        [key]: results?.[key],
+                    }), {})
+            );
+            return newInputs as Inputs;
+        });
+        setMetrics((previousMetrics) => (
+            previousMetrics.map((metric) => {
+                const value = results?.[metric.variable];
+                return { ...metric, value };
+            })
+        ));
+    }
+
+    // Run the initial model at the start of the game
+    useEffect(() => {
+        const results = simulate(
+            game.initialInputs,
+            Object.values(game.initialModels)
+        );
+        updateRoundResults(results);
+    }, [game]);
 
     // Additional state for managing decisions might be needed
     const [roundIndex, setRoundIndex] = useState<number>(0);
@@ -41,6 +138,13 @@ const App: React.FC<AppProps> = ({ game }) => {
     };
 
     const handleLockDecisions = () => {
+        const results = simulateRound({
+            inputs,
+            previousModels: models,
+            round,
+            decisions,
+        })
+        updateRoundResults(results);
         setRoundIndex(roundIndex + 1);
     };
 

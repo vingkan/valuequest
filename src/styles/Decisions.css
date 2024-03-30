@@ -65,10 +65,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* Ensure elements are spaced out */
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 20px 10px;
+    padding: 10px;
 }
 
 /* Adjust for left and right positioning */
@@ -86,9 +83,9 @@
 .profile-image-container {
     flex-shrink: 0;
     /* Prevent the container from shrinking */
-    width: 100px;
+    width: 150px;
     /* Fixed width for the container */
-    height: 100px;
+    height: 150px;
     /* Fixed height to maintain aspect ratio */
     margin: 0 20px;
     /* Adjust margin for spacing */
@@ -192,13 +189,11 @@
     flex-direction: row;
     /* Default layout for larger screens */
     justify-content: space-between;
-    margin-bottom: 20px;
 }
 
 .decision-navigation {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
 }
 
 .decision-navigation button {
@@ -256,6 +251,14 @@
 
 .selected-choices p {
     margin: 10px auto;
+}
+
+@media (min-width: 870px) {
+
+    .decision-section {
+        min-height: 45vh;
+    }
+
 }
 
 @media (max-width: 870px) {

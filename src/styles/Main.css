@@ -80,6 +80,6 @@ button {
 /* Assuming the Canvas component from React Three Fiber will be styled in-line or in its own dedicated stylesheet */
 
 .game-map {
-    height: 65vh;
-    min-height: 800px;
+    height: 60vh;
+    min-height: 500px;
 }
