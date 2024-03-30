@@ -20,6 +20,7 @@ export type Inputs = {
     providerDesiredCentsPerUtilizationPrimary: number
     providerDesiredCentsPerUtilizationSpecialty: number
     providerDesiredCentsPerUtilizationDrugs: number
+    genericDrugCostDiscountFactor: number
     // Quality Factors
     // Higher is Better
     careAccessibilityFactor: number
@@ -36,6 +37,10 @@ export type Inputs = {
     costAversionFactor: number
     lengthOfStay: number
     readmissionRate: number
+    // Quality Improvement Factors
+    primaryCareQualityImprovementFactor: number
+    readmissionReductionQualityImprovementFactor: number
+    genericDrugPerceptionFactor: number
     // Provider Factors
     patientsPerProvider: number
     providerAutonomyFactor: number

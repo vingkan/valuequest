@@ -254,7 +254,7 @@
     margin: 10px auto;
 }
 
-@media (min-width: 870px) {
+@media (min-width: 945px) {
 
     .decision-section {
         min-height: 45vh;
@@ -262,7 +262,7 @@
 
 }
 
-@media (max-width: 870px) {
+@media (max-width: 945px) {
 
     .options {
         flex-direction: column;

@@ -116,7 +116,7 @@
     color: var(--color-worse);
 }
 
-@media (max-width: 870px) {
+@media (max-width: 945px) {
 
     .metrics-bar-container {
         flex-direction: column;

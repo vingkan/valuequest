@@ -33,7 +33,7 @@ const FORMATTERS: Record<FormatterId, Formatter> = {
         DOLLARS_FORMATTER.format(value / CENTS_PER_DOLLAR)
     ),
     rate: (value: number) => value.toFixed(2),
-    hundred_score: (value: number) => (HUNDRED_SCORE * value).toFixed(0),
+    hundred_score: (value: number) => (HUNDRED_SCORE * value).toFixed(1),
 };
 
 function getPercentageChange(current: number, prior: number): number | null {

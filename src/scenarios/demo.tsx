@@ -15,38 +15,44 @@ const initialCareCoordinationModel = getCareCoordinationModel({
     feePerMemberPerMonthCents: 300_00
 })
 
-const initialAnnualWellnessVisitIncentive = getThresholdBonusModel({
-    name: "Annual Wellness Visit Bonus",
-    measures: {
-        primaryCareParticipationRate: {
-            isReverseMeasure: false,
-            minimumThreshold: 0.95,
-            bonusPerMemberPerYearCents: 1_50,
-        },
-    }
-})
+const getAnnualWellnessVisitIncentive = (isHigherBonus: boolean) => (
+    getThresholdBonusModel({
+        name: "Annual Wellness Visit Bonus",
+        measures: {
+            primaryCareParticipationRate: {
+                isReverseMeasure: false,
+                minimumThreshold: 0.95,
+                bonusPerMemberPerYearCents: isHigherBonus ? 1_75 : 1_50,
+            },
+        }
+    })
+)
 
-const initialReadmissionRateIncentive = getThresholdBonusModel({
-    name: "Readmission Rate Bonus",
-    measures: {
-        readmissionRate: {
-            isReverseMeasure: true,
-            minimumThreshold: 0.25,
-            bonusPerMemberPerYearCents: 3_75,
-        },
-    }
-})
+const getReadmissionRateIncentive = (isHigherBonus: boolean) => (
+    getThresholdBonusModel({
+        name: "Readmission Rate Bonus",
+        measures: {
+            readmissionRate: {
+                isReverseMeasure: true,
+                minimumThreshold: 0.25,
+                bonusPerMemberPerYearCents: isHigherBonus ? 3_75 : 3_50,
+            },
+        }
+    })
+)
 
-const initialBrandToGenericBonus = getThresholdBonusModel({
-    name: "Brand to Generic Bonus",
-    measures: {
-        genericPrescriptionRate: {
-            isReverseMeasure: false,
-            minimumThreshold: 0.65,
-            bonusPerMemberPerYearCents: 1_85,
-        },
-    }
-})
+const getBrandToGenericBonus = (isHigherBonus: boolean) => (
+    getThresholdBonusModel({
+        name: "Brand to Generic Bonus",
+        measures: {
+            genericPrescriptionRate: {
+                isReverseMeasure: false,
+                minimumThreshold: 0.65,
+                bonusPerMemberPerYearCents: isHigherBonus ? 1_85 : 1_35,
+            },
+        }
+    })
+)
 
 export const DEMO_GAME: Game = {
     metrics: [
@@ -113,6 +119,7 @@ export const DEMO_GAME: Game = {
         providerDesiredCentsPerUtilizationPrimary: 100_00,
         providerDesiredCentsPerUtilizationSpecialty: 1_000_00,
         providerDesiredCentsPerUtilizationDrugs: 50_00,
+        genericDrugCostDiscountFactor: 0.5,
         // Quality Factors
         // Higher is Better
         careAccessibilityFactor: 0.75,
@@ -129,6 +136,10 @@ export const DEMO_GAME: Game = {
         costAversionFactor: 0.75,
         lengthOfStay: 1,
         readmissionRate: 0.3,
+        // Quality Improvement Factors
+        primaryCareQualityImprovementFactor: 1.1,
+        readmissionReductionQualityImprovementFactor: 1.05,
+        genericDrugPerceptionFactor: 0.8,
         // Provider Factors
         patientsPerProvider: 10,
         providerAutonomyFactor: 0.6,
@@ -150,31 +161,34 @@ Navigate these decisions to get ready for contract year 2024.
             modelChanges: {
                 ffs: null,
                 ccf: initialCareCoordinationModel,
-                wellness: initialAnnualWellnessVisitIncentive,
-                readmission: initialReadmissionRateIncentive,
-                generic: initialBrandToGenericBonus,
+                wellness: getAnnualWellnessVisitIncentive(false),
+                readmission: getReadmissionRateIncentive(false),
+                generic: getBrandToGenericBonus(false),
             },
             inputMultipliers: {
                 primaryCareParticipationRate: 1.1,
-                readmissionRate: 0.8,
+                readmissionRate: 0.9,
                 genericPrescriptionRate: 2,
             },
             decisions: [
                 {
                     id: 'offer-more-contract-incentives',
                     title: 'Offer More Contract Incentives',
-                    description: 'One of our providers wants a revised contract with more performance incentive bonus money. Should we agree to this deal?',
+                    description: 'One of our providers wants a revised contract with more performance incentive bonus money if they hit their targets. Should we agree to this deal?',
                     options: [
                         {
                             character: 'Contract Manager',
                             description: 'Approve the deal. More incentives will get them focused on quality.',
                             imageUrl: 'assets/characters/character-2.png',
-                            modelChanges: {},
+                            modelChanges: {
+                                wellness: getAnnualWellnessVisitIncentive(true),
+                                readmission: getReadmissionRateIncentive(true),
+                                generic: getBrandToGenericBonus(true),
+                            },
                             inputMultipliers: {
-                                utilizationPerMemberPerYearPrimary: 1.05,
                                 primaryCareParticipationRate: 1.05,
-                                careGapClosureRate: 1.02,
-                                providerAutonomyFactor: 1.1,
+                                readmissionRate: 0.88,
+                                genericPrescriptionRate: 3,
                             }
                         },
                         {
@@ -183,9 +197,9 @@ Navigate these decisions to get ready for contract year 2024.
                             imageUrl: 'assets/characters/character-1.png',
                             modelChanges: {},
                             inputMultipliers: {
-                                utilizationPerMemberPerYearInpatient: 1.03,
-                                utilizationPerMemberPerYearSpecialty: 1.03,
-                                providerReportingBurden: 1.2,
+                                primaryCareParticipationRate: 0.75,
+                                readmissionRate: 1.1,
+                                genericPrescriptionRate: 0.75,
                             }
                         }
                     ]
@@ -200,14 +214,20 @@ Navigate these decisions to get ready for contract year 2024.
                             description: 'Without this documentation, we could be opening up both ourselves and the provider to fraud allegations.',
                             imageUrl: 'assets/characters/character-16.png',
                             modelChanges: {},
-                            inputMultipliers: {}
+                            inputMultipliers: {
+                                providerAutonomyFactor: 0.9,
+                                providerReportingBurden: 1.2,
+                            }
                         },
                         {
                             character: 'Medical Director',
                             description: 'This imposes unnecessary burden on providers. They will just see it as more red tape blocking their reimbursement.',
                             imageUrl: 'assets/characters/character-11.png',
                             modelChanges: {},
-                            inputMultipliers: {}
+                            inputMultipliers: {
+                                providerAutonomyFactor: 1.1,
+                                providerReportingBurden: 0.6,
+                            }
                         }
                     ],
                 },
