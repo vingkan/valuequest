@@ -36,6 +36,30 @@ test('calculate worst possible member satisfaction', () => {
     expect(actual).toBe(0)
 })
 
+test('member satisfaction cannot be greater than one', () => {
+    const actual = getMemberSatisfaction({
+        careAccessibilityFactor: 3,
+        providerTrustFactor: 1,
+        conditionsManagedRate: 1,
+        wellManagedRate: 1,
+        costAversionFactor: 0,
+        readmissionRate: 0,
+    })
+    expect(actual).toBe(1)
+})
+
+test('member satisfaction cannot be less than zero', () => {
+    const actual = getMemberSatisfaction({
+        careAccessibilityFactor: -30,
+        providerTrustFactor: 1,
+        conditionsManagedRate: 1,
+        wellManagedRate: 1,
+        costAversionFactor: 0,
+        readmissionRate: 0,
+    })
+    expect(actual).toBe(0)
+})
+
 test('calculate default worst possible provider satisfaction', () => {
     const actual = getProviderSatisfaction({})
     expect(actual).toBe(0)
@@ -72,6 +96,26 @@ test('calculate underpaid provider satisfaction', () => {
     // perfect on the other factors, but having a payment ratio of zero leads to
     // an overall half satisfaction score
     expect(actual).toBe(0.5)
+})
+
+test('possible provider satisfaction cannot be greater than one', () => {
+    const actual = getProviderSatisfaction({
+        providerAutonomyFactor: 3,
+        providerReportingBurden: 0,
+        desiredReimbursementCents: 100000,
+        actualReimbursementCents: 100000,
+    })
+    expect(actual).toBe(1)
+})
+
+test('possible provider satisfaction cannot be lower than zero', () => {
+    const actual = getProviderSatisfaction({
+        providerAutonomyFactor: -4,
+        providerReportingBurden: 4,
+        desiredReimbursementCents: 100000,
+        actualReimbursementCents: 0,
+    })
+    expect(actual).toBe(0)
 })
 
 test('calculate average quality of life', () => {

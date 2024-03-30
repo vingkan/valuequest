@@ -2,6 +2,7 @@ import { getGiniIndex } from './gini.tsx'
 import { Variables } from './variables.tsx'
 
 const MONTHS_PER_YEAR = 12
+const ZERO_TO_ONE_RANGE: [number, number] = [0, 1]
 
 type MemberSatisfactionFactors = {
     careAccessibilityFactor: number
@@ -43,6 +44,10 @@ function getWeightedSum<T extends FactorMap>(factors: T, weights: T): number {
     return weightedSum
 }
 
+function clampScore(score: number, [min, max]: [number, number]): number {
+    return Math.max(Math.min(score, max), min)
+}
+
 export function getMemberSatisfaction(vars: Partial<Variables>): number {
     const careAccessibilityFactor = orFallback(vars?.careAccessibilityFactor, 1)
     const providerTrustFactor = orFallback(vars?.providerTrustFactor, 1)
@@ -61,7 +66,7 @@ export function getMemberSatisfaction(vars: Partial<Variables>): number {
         readmissionRate: 1 - readmissionRate,
     }
     const satisfaction = getWeightedSum(factors, MEMBER_SATISFACTION_WEIGHTS)
-    return satisfaction
+    return clampScore(satisfaction, ZERO_TO_ONE_RANGE)
 }
 
 type ProviderSatisfactionFactors = {
@@ -99,7 +104,7 @@ export function getProviderSatisfaction(vars: Partial<Variables>): number {
         providerReportingBurden: 1 - providerReportingBurden,
     }
     const satisfaction = getWeightedSum(factors, PROVIDER_SATISFACTION_WEIGHTS)
-    return satisfaction
+    return clampScore(satisfaction, ZERO_TO_ONE_RANGE)
 }
 
 export function getQualityOfLife(vars: Partial<Variables>): number {

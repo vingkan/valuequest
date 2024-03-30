@@ -79,7 +79,7 @@ function simulateRound({
         modifiedInputs[key] = modifiedInputs[key] * value
     });
 
-    const results = simulate(modifiedInputs, modifiedModels);
+    const results = simulate(modifiedInputs, modifiedModels, true);
     return results;
 }
 
@@ -118,9 +118,11 @@ const App: React.FC<AppProps> = ({ game }) => {
 
     // Run the initial model at the start of the game
     useEffect(() => {
+        console.log(`Simulate Before Game`);
         const results = simulate(
             game.initialInputs,
-            Object.values(game.initialModels)
+            Object.values(game.initialModels),
+            true
         );
         updateRoundResults(-1, results);
     }, [game]);
@@ -146,6 +148,7 @@ const App: React.FC<AppProps> = ({ game }) => {
     };
 
     const handleLockDecisions = () => {
+        console.log(`Simulate Round ${roundIndex + 1}`);
         const results = simulateRound({
             inputs,
             previousModels: models,

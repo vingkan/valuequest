@@ -9,11 +9,12 @@ type MetricsBarProps = {
 type Formatter = (value: any) => string;
 
 enum FormatterId {
-    DOLLARS = "dollars",
+    CENTS_TO_DOLLARS = "cents_to_dollars",
     RATE = "rate",
     HUNDRED_SCORE = "hundred_score"
 };
 
+const CENTS_PER_DOLLAR = 100;
 const HUNDRED_SCORE = 100;
 const FRACTION_TO_PERCENT = 100;
 const SINGLE_PERCENT = 1;
@@ -28,7 +29,9 @@ const DOLLARS_FORMATTER = new Intl.NumberFormat("en-US", {
 const DEFAULT_FORMATTER: Formatter = (value: any) => `${value}`;
 
 const FORMATTERS: Record<FormatterId, Formatter> = {
-    dollars: (value: number) => DOLLARS_FORMATTER.format(value),
+    cents_to_dollars: (value: number) => (
+        DOLLARS_FORMATTER.format(value / CENTS_PER_DOLLAR)
+    ),
     rate: (value: number) => value.toFixed(2),
     hundred_score: (value: number) => (HUNDRED_SCORE * value).toFixed(0),
 };

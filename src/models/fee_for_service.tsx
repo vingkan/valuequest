@@ -1,12 +1,13 @@
 import { ServiceCategory } from '../simulation/cost.tsx'
 import {
     PaymentModel,
+    PaymentModelParams,
     PaymentModelOutput,
 } from '../simulation/payment.tsx'
 import { Variables } from '../simulation/variables.tsx'
 import { CategoryCostVariables, getActualSpend } from './helpers.tsx'
 
-type FeeForServiceParams = {
+type FeeForServiceParams = PaymentModelParams & {
     reimbursementRate: number
     includedCategories: ServiceCategory[]
 }
@@ -14,6 +15,7 @@ type FeeForServiceParams = {
 type FeeForServiceInputs = Partial<Variables> & CategoryCostVariables
 
 export function getSimpleFeeForServiceModel({
+    name,
     reimbursementRate,
     includedCategories
 }: FeeForServiceParams): PaymentModel {
@@ -21,7 +23,7 @@ export function getSimpleFeeForServiceModel({
     function run(vars: FeeForServiceInputs): PaymentModelOutput {
         const actualSpendCents = getActualSpend(vars, includedCategories)
         const paymentCents = reimbursementRate * actualSpendCents
-        return { paymentCents }
+        return { paymentCents, name }
     }
 
     return {

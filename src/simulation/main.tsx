@@ -11,12 +11,19 @@ import {
 } from './cost.tsx'
 import {
     PaymentModel,
+    getActualReimbursementCents,
+    getPaymentBreakdown,
     getPaymentModelOutputs,
-    getActualReimbursementCents
 } from './payment.tsx'
 import { Inputs, Outputs, Variables } from './variables.tsx'
 
-export function simulate(inputs: Inputs, models: PaymentModel[]): Variables {
+export function simulate(
+    inputs: Inputs,
+    models: PaymentModel[],
+    debug: boolean = false
+): Variables {
+    const { memberCount = 0 } = inputs
+
     // Calculate costs
     const costCentsByCategory = getCostCentsByCategory(inputs)
     const desiredReimbursementCents = getDesiredReimbursementCents({
@@ -34,6 +41,8 @@ export function simulate(inputs: Inputs, models: PaymentModel[]): Variables {
         models,
     )
     const actualReimbursementCents = getActualReimbursementCents(payments)
+    const breakdown = getPaymentBreakdown(payments, memberCount)
+    if (debug) console.log(breakdown)
 
     // Calculate quintuple aim outputs
     const memberSatisfaction = getMemberSatisfaction(inputs)

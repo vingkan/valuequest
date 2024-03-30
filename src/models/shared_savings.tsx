@@ -1,12 +1,13 @@
 import { ServiceCategory } from '../simulation/cost.tsx'
 import {
     PaymentModel,
+    PaymentModelParams,
     PaymentModelOutput,
 } from '../simulation/payment.tsx'
 import { Variables } from '../simulation/variables.tsx'
 import { CategoryCostVariables, getActualSpend } from './helpers.tsx'
 
-type SharedSavingsParams = {
+type SharedSavingsParams = PaymentModelParams & {
     targetSpendCentsPerMemberPerYear: number
     providerSavingsRate: number
     providerLossRate: number
@@ -19,6 +20,7 @@ type SharedSavingsInputs = Partial<Variables> & CategoryCostVariables & {
 }
 
 export function getSimpleSharedSavingsModel({
+    name,
     targetSpendCentsPerMemberPerYear,
     providerSavingsRate,
     providerLossRate,
@@ -58,7 +60,7 @@ export function getSimpleSharedSavingsModel({
             paymentCents += cappedLossCents
         }
 
-        return { paymentCents }
+        return { paymentCents, name }
     }
 
     return {

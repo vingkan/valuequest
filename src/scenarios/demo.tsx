@@ -1,10 +1,51 @@
 import { Game } from '../scenarios/scenario.tsx'
 import { ALL_SERVICE_CATEGORIES, ServiceCategory } from '../simulation/cost.tsx'
 import { getSimpleFeeForServiceModel } from '../models/fee_for_service.tsx'
+import { getCareCoordinationModel } from '../models/care_coordination.tsx'
+import { getThresholdBonusModel } from '../models/incentives.tsx'
 
 const initialFeeForServiceModel = getSimpleFeeForServiceModel({
+    name: "Fee For Service Reimbursement",
     reimbursementRate: 0.8,
     includedCategories: ALL_SERVICE_CATEGORIES,
+})
+
+const initialCareCoordinationModel = getCareCoordinationModel({
+    name: "Care Coordination Fee",
+    feePerMemberPerMonthCents: 300_00
+})
+
+const initialAnnualWellnessVisitIncentive = getThresholdBonusModel({
+    name: "Annual Wellness Visit Bonus",
+    measures: {
+        primaryCareParticipationRate: {
+            isReverseMeasure: false,
+            minimumThreshold: 0.95,
+            bonusPerMemberPerYearCents: 1_50,
+        },
+    }
+})
+
+const initialReadmissionRateIncentive = getThresholdBonusModel({
+    name: "Readmission Rate Bonus",
+    measures: {
+        readmissionRate: {
+            isReverseMeasure: true,
+            minimumThreshold: 0.25,
+            bonusPerMemberPerYearCents: 3_75,
+        },
+    }
+})
+
+const initialBrandToGenericBonus = getThresholdBonusModel({
+    name: "Brand to Generic Bonus",
+    measures: {
+        genericPrescriptionRate: {
+            isReverseMeasure: false,
+            minimumThreshold: 0.65,
+            bonusPerMemberPerYearCents: 1_85,
+        },
+    }
 })
 
 export const DEMO_GAME: Game = {
@@ -29,8 +70,8 @@ export const DEMO_GAME: Game = {
             name: "Cost PMPM",
             variable: "centsPerMemberPerMonth",
             higherIsBetter: false,
-            explanation: "Lower is better. Average cost of healthcare services provided per member per month.",
-            formatId: "dollars",
+            explanation: "Lower is better. Average cost of all covered services per member per month. Inflation-adjusted.",
+            formatId: "cents_to_dollars",
             value: 0,
         },
         {
@@ -45,7 +86,7 @@ export const DEMO_GAME: Game = {
             name: "Health Inequity",
             variable: "qualityOfLifeGiniIndex",
             higherIsBetter: false,
-            explanation: "Lower is better. Gini index from 0 (all patients have the same quality of life) to 1 (maximum inequality).",
+            explanation: "Lower is better. Gini index from 0 (same quality of life for all) to 1 (any sick people pass away).",
             formatId: "rate",
             value: 0,
         },
@@ -59,24 +100,24 @@ export const DEMO_GAME: Game = {
         qualityOfLifeLowRisk: 0.8,
         qualityOfLifeMediumRisk: 0.55,
         qualityOfLifeHighRisk: 0.4,
-        utilizationPerMemberPerYearInpatient: 0.005,
-        utilizationPerMemberPerYearOutpatient: 0.02,
-        utilizationPerMemberPerYearPrimary: 0.5,
-        utilizationPerMemberPerYearSpecialty: 0.01,
-        utilizationPerMemberPerYearDrugs: 0.5,
-        utilizationFactorLowRisk: 0.5,
+        utilizationPerMemberPerYearInpatient: 0.42,
+        utilizationPerMemberPerYearOutpatient: 0.3,
+        utilizationPerMemberPerYearPrimary: 0.8,
+        utilizationPerMemberPerYearSpecialty: 0.6,
+        utilizationPerMemberPerYearDrugs: 12,
+        utilizationFactorLowRisk: 1,
         utilizationFactorMediumRisk: 1.5,
         utilizationFactorHighRisk: 2,
-        providerDesiredCentsPerUtilizationInpatient: 3_000_00,
-        providerDesiredCentsPerUtilizationOutpatient: 150_00,
-        providerDesiredCentsPerUtilizationPrimary: 50_00,
+        providerDesiredCentsPerUtilizationInpatient: 5_000_00,
+        providerDesiredCentsPerUtilizationOutpatient: 200_00,
+        providerDesiredCentsPerUtilizationPrimary: 100_00,
         providerDesiredCentsPerUtilizationSpecialty: 1_000_00,
-        providerDesiredCentsPerUtilizationDrugs: 10_00,
+        providerDesiredCentsPerUtilizationDrugs: 50_00,
         // Quality Factors
         // Higher is Better
         careAccessibilityFactor: 0.75,
         providerTrustFactor: 0.75,
-        primaryCareParticipationRate: 0.3,
+        primaryCareParticipationRate: 0.83,
         preventionRate: 0.15,
         conditionsManagedRate: 0.65,
         wellManagedRate: 0.25,
@@ -106,8 +147,18 @@ Your job is to manage the pilot and make it a huge success.
 Navigate these decisions to get ready for contract year 2024.
                 `,
             },
-            modelChanges: {},
-            inputMultipliers: {},
+            modelChanges: {
+                ffs: null,
+                ccf: initialCareCoordinationModel,
+                wellness: initialAnnualWellnessVisitIncentive,
+                readmission: initialReadmissionRateIncentive,
+                generic: initialBrandToGenericBonus,
+            },
+            inputMultipliers: {
+                primaryCareParticipationRate: 1.1,
+                readmissionRate: 0.8,
+                genericPrescriptionRate: 2,
+            },
             decisions: [
                 {
                     id: 'offer-more-contract-incentives',
