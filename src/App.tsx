@@ -87,8 +87,9 @@ const App: React.FC<AppProps> = ({ game }) => {
     const [metrics, setMetrics] = useState<Metric[]>(game.metrics);
     const [inputs, setInputs] = useState<Inputs>(game.initialInputs);
     const [models, setModels] = useState<PaymentModelMap>(game.initialModels);
+    const [roundVars, setRoundVars] = useState<Record<number, Variables>>({});
 
-    function updateRoundResults(results: Variables) {
+    function updateRoundResults(roundIndex: number, results: Variables) {
         setInputs((previousInputs) => {
             const newInputs = (
                 Object
@@ -102,10 +103,17 @@ const App: React.FC<AppProps> = ({ game }) => {
         });
         setMetrics((previousMetrics) => (
             previousMetrics.map((metric) => {
+                const priorRound = roundIndex - 1;
                 const value = results?.[metric.variable];
-                return { ...metric, value };
+                const priorValue = roundVars?.[priorRound]?.[metric.variable];
+                return {
+                    ...metric,
+                    value,
+                    priorValue,
+                };
             })
         ));
+        setRoundVars((prev) => ({ ...prev, [roundIndex]: results }));
     }
 
     // Run the initial model at the start of the game
@@ -114,7 +122,7 @@ const App: React.FC<AppProps> = ({ game }) => {
             game.initialInputs,
             Object.values(game.initialModels)
         );
-        updateRoundResults(results);
+        updateRoundResults(-1, results);
     }, [game]);
 
     // Additional state for managing decisions might be needed
@@ -144,7 +152,7 @@ const App: React.FC<AppProps> = ({ game }) => {
             round,
             decisions,
         })
-        updateRoundResults(results);
+        updateRoundResults(roundIndex, results);
         setRoundIndex(roundIndex + 1);
     };
 

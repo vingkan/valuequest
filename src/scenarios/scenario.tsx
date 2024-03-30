@@ -32,9 +32,11 @@ export type Decision = {
 export type Metric = {
     name: string;
     variable: string;
-    value: any;
+    higherIsBetter: boolean;
     explanation: string;
     formatId: string;
+    value: any;
+    priorValue?: any;
 };
 
 export type Round = {

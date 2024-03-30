@@ -8,6 +8,8 @@ html {
     --color-accent: #09e0c0;
     --color-accenter: #057766;
     --color-selected: #d7f9b2;
+    --color-better: #acd924;
+    --color-worse: #eb4f1f;
     background: var(--color-light);
 }
 
@@ -82,4 +84,5 @@ button {
 .game-map {
     height: 60vh;
     min-height: 500px;
+    margin-top: 50px;
 }

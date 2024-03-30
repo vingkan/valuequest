@@ -23,6 +23,7 @@
     margin: 0;
     padding: 20px;
     padding-bottom: 25px;
+    border-bottom: 2px solid var(--color-dark);
 }
 
 .tooltip-text {
@@ -37,7 +38,7 @@
     /* Positioning */
     position: absolute;
     z-index: 1;
-    top: 100px;
+    top: 110px;
     /* Adjust based on your layout */
     left: 50%;
     margin-left: -110px;
@@ -51,6 +52,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.metric.has-comparator .tooltip-text {
+    top: 160px;
 }
 
 .tooltip-text::after {
@@ -71,6 +76,7 @@
     cursor: pointer;
     /* Indicates interactive element */
     background: var(--color-darker);
+    border-bottom-color: white;
 }
 
 .metric:hover .tooltip-text {
@@ -79,13 +85,35 @@
 }
 
 .metric-name {
-    font-size: 0.9em;
-    margin-bottom: 5px;
+    font-size: 1em;
+    margin-bottom: 10px;
 }
 
 .metric-value {
     font-weight: bold;
     font-size: 1.5em;
+}
+
+.metric .comparator {
+    margin-top: 10px;
+    line-height: 1.1em;
+}
+
+.metric .comparator .delta {
+    font-size: 0.9em;
+    white-space: pre;
+}
+
+.metric .comparator .prior {
+    font-size: 0.7em;
+}
+
+.metric .comparator .delta.better {
+    color: var(--color-better);
+}
+
+.metric .comparator .delta.worse {
+    color: var(--color-worse);
 }
 
 @media (max-width: 870px) {
