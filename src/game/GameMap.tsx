@@ -1,6 +1,50 @@
-import React, { useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Mesh } from 'three'
+import React, { useEffect, useRef, useState } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { MOUSE, Mesh } from 'three'
+import { Html, OrbitControls } from '@react-three/drei';
+import '../styles/GameMap.css';
+
+type GameTooltipProps = {
+  text: string
+  height: number
+}
+
+function GameTooltip({ text, height = 0 }: GameTooltipProps) {
+  const position: [number, number, number] = [0, 0, height]
+  const rotation: [number, number, number] = [Math.PI / 2, Math.PI / 4, 0]
+  return (
+    <Html position={position} rotation={rotation} transform occlude>
+      <div className="game-tooltip">{text}</div>
+    </Html>
+  )
+}
+
+function MeshWithTooltip({ children, position, text, height }) {
+  const { gl } = useThree()
+  const [hovered, setHovered] = useState(false)
+
+  useEffect(() => {
+    gl.domElement.style.cursor = hovered ? 'pointer' : 'auto'
+
+    return () => {
+      gl.domElement.style.cursor = 'auto'
+    }
+  }, [gl, hovered])
+
+  return (
+    <mesh
+      position={position}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    >
+      {React.Children.map(children, (child) => {
+        if (!React.isValidElement(child)) return child
+        return React.cloneElement(child, {...{ hovered }})
+      })}
+      {hovered && <GameTooltip text={text} height={height} />}
+    </mesh>
+  )
+}
 
 enum Axis {
   X = "x",
@@ -93,19 +137,23 @@ function LappingBox({
 
     switch (direction) {
       case Direction.RIGHT:
-        meshRef.current.position.x += speed * delta
+        meshRef.current.position.x = clampValue(
+          meshRef.current.position.x + speed * delta, -lapSize, lapSize)
         if (meshRef.current.position.x >= lapSize) setDirection(Direction.DOWN)
         break
       case Direction.DOWN:
-        meshRef.current.position.y -= speed * delta
+        meshRef.current.position.y = clampValue(
+          meshRef.current.position.y - speed * delta, -lapSize, lapSize)
         if (meshRef.current.position.y <= -lapSize) setDirection(Direction.LEFT)
         break;
       case Direction.LEFT:
-        meshRef.current.position.x -= speed * delta
+        meshRef.current.position.x = clampValue(
+          meshRef.current.position.x - speed * delta, -lapSize, lapSize)
         if (meshRef.current.position.x <= -lapSize) setDirection(Direction.UP)
         break
       case Direction.UP:
-        meshRef.current.position.y += speed * delta
+        meshRef.current.position.y = clampValue(
+          meshRef.current.position.y + speed * delta, -lapSize, lapSize)
         if (meshRef.current.position.y >= lapSize) setDirection(Direction.RIGHT)
         break
       default:
@@ -121,13 +169,14 @@ function LappingBox({
   )
 }
 
-function Hospital() {
+function Hospital({ hovered = false }) {
+  const buildingColor = hovered ? "lightblue" : "white"
   return (
     <>
       {/* Main building */}
       <mesh position={[0, 0, 0.75]}>
         <boxGeometry args={[2, 2, 1.5]} />
-        <meshStandardMaterial color="white" />
+        <meshStandardMaterial color={buildingColor} />
       </mesh>
       {/* Red cross */}
       <mesh position={[0, 0, 1.52]}>
@@ -197,7 +246,9 @@ export const IsometricGameMap: React.FC = () => {
     >
       <ambientLight intensity={1.5} />
       <directionalLight position={[10, 10, 10]} intensity={1} castShadow />
-      <Hospital />
+      <MeshWithTooltip position={[0, 0, 0]} text={"Hospital"} height={2.5} >
+        <Hospital />
+      </MeshWithTooltip>
       <Tree position={[1.5, -1.5, 0]} />
       <Tree position={[-1.5, -1.5, 0]} />
       <PacingBox
@@ -218,6 +269,15 @@ export const IsometricGameMap: React.FC = () => {
         speed={speed}
       />
       <Ground position={[0, 0, 0]} size={[10, 10]} color={"#97fa61"} />
+      <OrbitControls
+        enableZoom={true}
+        enablePan={true}
+        enableRotate={false}
+        mouseButtons={{ LEFT: MOUSE.PAN, MIDDLE: MOUSE.DOLLY }}
+        enableDamping={false}
+        zoomSpeed={1}
+        panSpeed={1}
+      />
     </Canvas>
   );
 };
