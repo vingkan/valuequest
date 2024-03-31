@@ -169,22 +169,25 @@ function LappingBox({
   )
 }
 
-function Hospital({ hovered = false }) {
+function Hospital({ height, hovered = false }) {
   const buildingColor = hovered ? "lightblue" : "white"
+  const crossSize = 0.8
+  const crossStemSize = 0.2
+  const crossOffset = 0.04
   return (
     <>
       {/* Main building */}
-      <mesh position={[0, 0, 0.75]}>
-        <boxGeometry args={[2, 2, 1.5]} />
+      <mesh position={[0, 0, height / 2]}>
+        <boxGeometry args={[2, 2, height]} />
         <meshStandardMaterial color={buildingColor} />
       </mesh>
       {/* Red cross */}
-      <mesh position={[0, 0, 1.52]}>
-        <boxGeometry args={[0.4, 0.1, 0.1]} />
+      <mesh position={[0, 0, height + crossOffset]}>
+        <boxGeometry args={[crossSize, crossStemSize, crossStemSize]} />
         <meshStandardMaterial color="#ff1764" />
       </mesh>
-      <mesh position={[0, 0, 1.52]}>
-        <boxGeometry args={[0.1, 0.4, 0.1]} />
+      <mesh position={[0, 0, height + crossOffset]}>
+        <boxGeometry args={[crossStemSize, crossSize, crossStemSize]} />
         <meshStandardMaterial color="#ff1764" />
       </mesh>
       {/* Entrance */}
@@ -232,6 +235,8 @@ function Ground({ position, size, color }) {
 export const IsometricGameMap: React.FC = () => {
   const speed = 3
   const boxSize = 0.25
+  const tooltipHeight = 1
+  const hospitalHeight = 1.75
 
   return (
     <Canvas
@@ -246,8 +251,12 @@ export const IsometricGameMap: React.FC = () => {
     >
       <ambientLight intensity={1.5} />
       <directionalLight position={[10, 10, 10]} intensity={1} castShadow />
-      <MeshWithTooltip position={[0, 0, 0]} text={"Hospital"} height={2.5} >
-        <Hospital />
+      <MeshWithTooltip
+        position={[0, 0, 0]}
+        text={"Hospital"}
+        height={hospitalHeight + tooltipHeight}
+      >
+        <Hospital height={hospitalHeight} />
       </MeshWithTooltip>
       <Tree position={[1.5, -1.5, 0]} />
       <Tree position={[-1.5, -1.5, 0]} />
