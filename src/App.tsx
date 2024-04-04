@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { MetricsBar } from './game/MetricsBar.tsx';
 import { IsometricGameMap } from './game/GameMap.tsx';
 import { DecisionPresentation } from './game/Decisions.tsx';
+import { SlidingPane } from './game/SlidingPane.tsx'
 import {
     Game,
     Round,
@@ -190,6 +191,7 @@ const App: React.FC<AppProps> = ({ game }) => {
                     </div>
                 )}
             </div>
+            <SlidingPane />
         </div>
     );
 };

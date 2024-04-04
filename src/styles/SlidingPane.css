@@ -1,0 +1,54 @@
+.sliding-pane {
+    position: fixed;
+    top: 0;
+    right: 5px;
+    width: 300px;
+    height: 100%;
+    background-color: #f9f9f9;
+
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.15);
+    border-left: 5px solid var(--color-dark);
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 4;
+}
+
+.sliding-pane.open {
+    right: 0;
+    transform: translateX(0);
+}
+
+.tab {
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 60px;
+    background-color: var(--color-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab .arrow {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+.tab:not(.open) .arrow {
+    border-right: 10px solid white;
+    /* Arrow pointing left (pane closed) */
+}
+
+.tab.open .arrow {
+    border-left: 10px solid white;
+    /* Arrow pointing right (pane open) */
+}
+
+.content {
+    padding: 20px;
+}
