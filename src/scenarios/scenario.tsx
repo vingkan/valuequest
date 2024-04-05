@@ -23,6 +23,8 @@ export type DecisionOption = {
     character: string;
     description: string;
     imageUrl: string;
+    label?: string;
+    labelSuffix?: string;
     modelChanges: PaymentModelMap;
     inputModifiers: InputModifiers;
 };
@@ -39,10 +41,15 @@ export type Metric = {
     name: string;
     variable: string;
     higherIsBetter: boolean;
-    explanation: string;
+    explanation?: string;
     formatId: string;
     value: any;
     priorValue?: any;
+};
+
+export type MetricGroup = {
+    name: string
+    metrics: Metric[]
 };
 
 export type Round = {
@@ -54,6 +61,7 @@ export type Round = {
 
 export type Game = {
     metrics: Metric[];
+    focusMetrics: MetricGroup[];
     initialInputs: Inputs;
     initialModels: Record<string, PaymentModel>;
     rounds: Round[];

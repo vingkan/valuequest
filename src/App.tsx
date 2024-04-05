@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { MetricsBar } from './game/MetricsBar.tsx';
+import { MetricsBar, FocusMetrics } from './game/MetricsBar.tsx';
 import { IsometricGameMap } from './game/GameMap.tsx';
 import { DecisionPresentation } from './game/Decisions.tsx';
 import { SlidingPane } from './game/SlidingPane.tsx'
@@ -10,6 +10,7 @@ import {
     Metric,
     Decision,
     PaymentModelMap,
+    MetricGroup,
 } from './scenarios/scenario.tsx'
 import { Inputs, Variables } from './simulation/variables.tsx'
 import { simulate } from './simulation/main.tsx'
@@ -87,6 +88,7 @@ function simulateRound({
 
 const App: React.FC<AppProps> = ({ game }) => {
     const [metrics, setMetrics] = useState<Metric[]>(game.metrics);
+    const [focusMetrics, setFocusMetrics] = useState<MetricGroup[]>(game.focusMetrics);
     const [inputs, setInputs] = useState<Inputs>(game.initialInputs);
     const [models, setModels] = useState<PaymentModelMap>(game.initialModels);
     const [roundVars, setRoundVars] = useState<Record<number, Variables>>({});
@@ -115,6 +117,22 @@ const App: React.FC<AppProps> = ({ game }) => {
                 };
             })
         ));
+        setFocusMetrics((previousFocusMetrics) => (
+            previousFocusMetrics.map((metricGroup) => {
+                const { name, metrics} = metricGroup 
+                const updated = metrics.map((metric) => {
+                    const priorRound = roundIndex - 1;
+                    const value = results?.[metric.variable];
+                    const priorValue = roundVars?.[priorRound]?.[metric.variable];
+                    return {
+                        ...metric,
+                        value,
+                        priorValue,
+                    };
+                })
+                return { name, metrics: updated }
+            })
+        ))
         setRoundVars((prev) => ({ ...prev, [roundIndex]: results }));
     }
 
@@ -191,7 +209,9 @@ const App: React.FC<AppProps> = ({ game }) => {
                     </div>
                 )}
             </div>
-            <SlidingPane />
+            <SlidingPane>
+                <FocusMetrics groups={focusMetrics} />
+            </SlidingPane>
         </div>
     );
 };

@@ -115,6 +115,27 @@ export function simulate(
         ...costCentsByCategory,
     })
 
+    const incurredPrimaryPmpm = getCentsPerMemberPerMonth(
+        costCentsByCategory.costCentsPrimary,
+        memberCount
+    )
+    const incurredInpatientPmpm = getCentsPerMemberPerMonth(
+        costCentsByCategory.costCentsInpatient,
+        memberCount
+    )
+    const incurredOutpatientPmpm = getCentsPerMemberPerMonth(
+        costCentsByCategory.costCentsOutpatient,
+        memberCount
+    )
+    const incurredSpecialtyPmpm = getCentsPerMemberPerMonth(
+        costCentsByCategory.costCentsSpecialty,
+        memberCount
+    )
+    const incurredDrugsPmpm = getCentsPerMemberPerMonth(
+        costCentsByCategory.costCentsDrugs,
+        memberCount
+    )
+
     // Run payment models
     const payments = getPaymentModelOutputs(
         {
@@ -169,6 +190,11 @@ export function simulate(
         actualReimbursementCents,
         memberSatisfaction,
         qualityOfLife,
+        incurredPrimaryPmpm,
+        incurredInpatientPmpm,
+        incurredOutpatientPmpm,
+        incurredSpecialtyPmpm,
+        incurredDrugsPmpm,
         incurredCentsPerMemberPerMonth,
         paidCentsPerMemberPerMonth,
         providerSatisfaction,

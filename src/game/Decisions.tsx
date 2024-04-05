@@ -38,7 +38,7 @@ const DecisionOptionComponent: React.FC<DecisionOptionProps> = ({ option, onChoo
             <div className={bubbleClass}>
                 <h4>{option.character}</h4>
                 <p>{option.description}</p>
-                <button onClick={onChoose}>Choose {optionLabel}</button>
+                <button onClick={onChoose}>Choose {option?.label || optionLabel} {option?.labelSuffix}</button>
             </div>
         </div>
     );
@@ -126,10 +126,10 @@ export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
                             const emoji = (
                                 hasSelection ? (isYes ? '✅' : '❌') : '🤔'
                             )
+                            const option = decision.options?.[decision?.selectedOptionIndex || 0] || {}
+                            const selected = option?.label || `${emoji} ${selection}`
                             return (
-                                <p key={index}>
-                                    {emoji} {selection}: {decision.title}
-                                </p>
+                                <p key={index}>{selected}: {decision.title}</p>
                             )
                         })}
                     </div>

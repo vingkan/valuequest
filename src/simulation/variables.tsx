@@ -54,6 +54,12 @@ export type Outputs = {
     costCentsPrimary: number
     costCentsSpecialty: number
     costCentsDrugs: number
+    // Cost PMPMs
+    incurredPrimaryPmpm: number
+    incurredInpatientPmpm: number
+    incurredOutpatientPmpm: number
+    incurredSpecialtyPmpm: number
+    incurredDrugsPmpm: number
     // Payment Model Factors
     desiredReimbursementCents: number
     actualReimbursementCents: number

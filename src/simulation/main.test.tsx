@@ -53,6 +53,11 @@ test('run simulation with no payment models', () => {
         costCentsPrimary: 0,
         costCentsSpecialty: 0,
         costCentsDrugs: 0,
+        incurredInpatientPmpm: 2000,
+        incurredOutpatientPmpm: 0,
+        incurredPrimaryPmpm: 0,
+        incurredSpecialtyPmpm: 0,
+        incurredDrugsPmpm: 0,
         desiredReimbursementCents: 240000,
         actualReimbursementCents: 0,
         // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall
@@ -126,6 +131,11 @@ test('run simulation with one simple payment model', () => {
         costCentsPrimary: 0,
         costCentsSpecialty: 0,
         costCentsDrugs: 0,
+        incurredInpatientPmpm: 2000,
+        incurredOutpatientPmpm: 0,
+        incurredPrimaryPmpm: 0,
+        incurredSpecialtyPmpm: 0,
+        incurredDrugsPmpm: 0,
         desiredReimbursementCents: 240000,
         actualReimbursementCents: 120000,
         // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall

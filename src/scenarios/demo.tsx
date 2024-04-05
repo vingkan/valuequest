@@ -3,6 +3,7 @@ import { ALL_SERVICE_CATEGORIES, ServiceCategory } from '../simulation/cost.tsx'
 import { getSimpleFeeForServiceModel } from '../models/fee_for_service.tsx'
 import { getCareCoordinationModel } from '../models/care_coordination.tsx'
 import { getThresholdBonusModel, ThresholdConfig } from '../models/incentives.tsx'
+import { getSimpleSharedSavingsModel } from '../models/shared_savings.tsx'
 
 const initialFeeForServiceModel = getSimpleFeeForServiceModel({
     name: "Fee For Service Reimbursement",
@@ -10,9 +11,55 @@ const initialFeeForServiceModel = getSimpleFeeForServiceModel({
     includedCategories: ALL_SERVICE_CATEGORIES,
 })
 
+const inpatientCarveOutFeeForServiceModel = getSimpleFeeForServiceModel({
+    name: "Inpatient Carve-Out Fee For Service Reimbursement",
+    reimbursementRate: 0.4,
+    includedCategories: [ServiceCategory.Inpatient],
+})
+
+const specialtyOnlyFeeForServiceModel = getSimpleFeeForServiceModel({
+    name: "Specialty Fee For Service Reimbursement",
+    reimbursementRate: 0.8,
+    includedCategories: [ServiceCategory.Specialty],
+})
+
+const diabetesExcludedSpecialtyFeeForServiceModel = getSimpleFeeForServiceModel({
+    name: "Diabetes-Excluded Specialty Fee For Service Reimbursement",
+    reimbursementRate: 0.25,
+    includedCategories: [ServiceCategory.Specialty],
+})
+
+const copdExcludedSpecialtyFeeForServiceModel = getSimpleFeeForServiceModel({
+    name: "COPD-Excluded Specialty Fee For Service Reimbursement",
+    reimbursementRate: 0.7,
+    includedCategories: [ServiceCategory.Specialty],
+})
+
+const diabetesEpisodesModel = getSimpleSharedSavingsModel({
+    name: "Diabetes Shared Savings",
+    targetSpendCentsPerMemberPerYear: 16_000_00,
+    providerSavingsRate: 0.5,
+    providerLossRate: 0.5,
+    providerStopLossCapCents: 2_000_00,
+    fractionOfPopulationCovered: 0.105,
+    fractionOfCostCovered: 0.43,
+    includedCategories: [ServiceCategory.Inpatient, ServiceCategory.Specialty],
+})
+
+const copdEpisodesModel = getSimpleSharedSavingsModel({
+    name: "COPD Shared Savings",
+    targetSpendCentsPerMemberPerYear: 21_000_00,
+    providerSavingsRate: 0.5,
+    providerLossRate: 0.5,
+    providerStopLossCapCents: 2_000_00,
+    fractionOfPopulationCovered: 0.062,
+    fractionOfCostCovered: 0.36,
+    includedCategories: [ServiceCategory.Inpatient, ServiceCategory.Specialty],
+})
+
 const initialCareCoordinationModel = getCareCoordinationModel({
     name: "Care Coordination Fee",
-    feePerMemberPerMonthCents: 306_00
+    feePerMemberPerMonthCents: 150_00,
 })
 
 const getAnnualWellnessVisitIncentive = (overrides: Partial<ThresholdConfig>) => (
@@ -100,6 +147,135 @@ export const DEMO_GAME: Game = {
             value: 0,
         },
     ],
+    focusMetrics: [
+        {
+            name: "Member Population",
+            metrics: [
+                {
+                    name: "Total Members",
+                    variable: "memberCount",
+                    higherIsBetter: true,
+                    formatId: "number_comma",
+                    value: 0,
+                },
+                {
+                    name: "% of Population Low Risk",
+                    variable: "memberRateLowRisk",
+                    higherIsBetter: false,
+                    formatId: "percentage",
+                    value: 0,
+                },
+                {
+                    name: "% of Population Med Risk",
+                    variable: "memberRateMediumRisk",
+                    higherIsBetter: false,
+                    formatId: "percentage",
+                    value: 0,
+                },
+                {
+                    name: "% of Population High Risk",
+                    variable: "memberRateHighRisk",
+                    higherIsBetter: false,
+                    formatId: "percentage",
+                    value: 0,
+                },
+                {
+                    name: "Avg. Quality of Life Low Risk",
+                    variable: "qualityOfLifeLowRisk",
+                    higherIsBetter: false,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+                {
+                    name: "Avg. Quality of Life Med Risk",
+                    variable: "qualityOfLifeMediumRisk",
+                    higherIsBetter: false,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+                {
+                    name: "Avg. Quality of Life High Risk",
+                    variable: "qualityOfLifeHighRisk",
+                    higherIsBetter: false,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+            ],
+        },
+        {
+            name: "Cost and Utilization",
+            metrics: [
+                {
+                    name: "Total Incurred PMPM",
+                    variable: "incurredCentsPerMemberPerMonth",
+                    higherIsBetter: false,
+                    formatId: "cents_to_dollars",
+                    value: 0,
+                },
+                {
+                    name: "Primary Care PMPM",
+                    variable: "incurredPrimaryPmpm",
+                    higherIsBetter: false,
+                    formatId: "cents_to_dollars",
+                    value: 0,
+                },
+                {
+                    name: "Inpatient PMPM",
+                    variable: "incurredInpatientPmpm",
+                    higherIsBetter: false,
+                    formatId: "cents_to_dollars",
+                    value: 0,
+                },
+                {
+                    name: "Outpatient PMPM",
+                    variable: "incurredOutpatientPmpm",
+                    higherIsBetter: false,
+                    formatId: "cents_to_dollars",
+                    value: 0,
+                },
+                {
+                    name: "Specialty PMPM",
+                    variable: "incurredSpecialtyPmpm",
+                    higherIsBetter: false,
+                    formatId: "cents_to_dollars",
+                    value: 0,
+                },
+                {
+                    name: "Pharmacy PMPM",
+                    variable: "incurredDrugsPmpm",
+                    higherIsBetter: false,
+                    formatId: "cents_to_dollars",
+                    value: 0,
+                },
+            ],
+        },
+        {
+            name: "Quality Performance",
+            metrics: [
+                {
+                    name: "Primary Care Participation Rate",
+                    variable: "primaryCareParticipationRate",
+                    higherIsBetter: true,
+                    formatId: "percentage",
+                    value: 0,
+                },
+                {
+                    name: "Readmission Rate",
+                    variable: "readmissionRate",
+                    higherIsBetter: false,
+                    formatId: "percentage",
+                    value: 0,
+                },
+                {
+                    name: "Generic Drug Prescription Rate",
+                    variable: "genericDrugPerceptionFactor",
+                    higherIsBetter: true,
+                    formatId: "percentage",
+                    value: 0,
+                },
+            ],
+        },
+    ],
     initialInputs: {
         // Cost and Utilization Factors
         memberCount: 500_000,
@@ -163,6 +339,8 @@ Navigate these decisions to get ready for contract year 2024.
             },
             modelChanges: {
                 ffs: null,
+                ffsSpecialty: specialtyOnlyFeeForServiceModel,
+                ffsInpatient: inpatientCarveOutFeeForServiceModel,
                 ccf: initialCareCoordinationModel,
                 // Need +0.1 modifier to hit this target
                 wellness: getAnnualWellnessVisitIncentive({}),
@@ -323,6 +501,104 @@ Now it's time to prepare for contract year 2025.
                                 readmissionRate: 0,
                                 genericPrescriptionRate: 0,
                             }
+                        }
+                    ],
+                },
+            ],
+        },
+        {
+            scenario: {
+                title: 'Contract Year 2026',
+                description: `
+We have a high spend rate in specialty care such as knee surgery, chronic lung problems, or diabetes management.
+Our goal is to launch an episodes of care model this year.
+We will set a quality bar for the patient's health outcomes. The provider must pass the quality bar to earn payments.
+If they spend less than our target, they keep some of the savings.
+If they go over the target, they split the losses with the plan.
+                `,
+            },
+            modelChanges: {},
+            inputModifiers: {},
+            decisions: [
+                {
+                    id: 'choose-episodes-model-condition',
+                    title: 'Choose Condition for Episodes of Care Model',
+                    description: 'We can only focus on one condition for our pilot. Should we pick Chronic Obstructed Pulmonary Disease (COPD) or Diabetes Management? Unfortunately, the expert on each condition says we should pick the other.',
+                    options: [
+                        {
+                            character: 'Endocrinologist (Diabetes)',
+                            description: 'While care for diabetes patients can exceed $16,000 per year, only roughly $9,600 can be attributed to the condition itself. This model could really shortchange providers.',
+                            imageUrl: 'assets/characters/character-15.png',
+                            label: 'COPD',
+                            labelSuffix: 'Instead',
+                            modelChanges: {
+                                eoc: copdEpisodesModel,
+                                ffsSpecialty: copdExcludedSpecialtyFeeForServiceModel,
+                                ffsInpatient: null,
+                            },
+                            inputModifiers: {
+                                primaryCareParticipationRate: 0.003,
+                                utilizationPerMemberPerYearPrimary: 0.02,
+                                utilizationPerMemberPerYearSpecialty: -0.02,
+                                utilizationPerMemberPerYearInpatient: -0.005,
+                                utilizationPerMemberPerYearDrugs: 0.05,
+                                providerDesiredCentsPerUtilizationSpecialty: -0.05,
+                                providerAutonomyFactor: -0.1,
+                                providerReportingBurden: 0.1,
+                                qualityOfLifeMediumRisk: 0.15,
+                                readmissionRate: -0.03,
+                            }
+                        },
+                        {
+                            character: 'Pulmonologist (COPD)',
+                            description: 'Treating COPD is extremely case-by-case. Choosing one set of quality measures and one cost target for all patients will inhibit providing the best care.',
+                            imageUrl: 'assets/characters/character-12.png',
+                            label: 'Diabetes',
+                            labelSuffix: 'Instead',
+                            modelChanges: {
+                                eoc: diabetesEpisodesModel,
+                                ffsSpecialty: diabetesExcludedSpecialtyFeeForServiceModel,
+                                ffsInpatient: null,
+                            },
+                            inputModifiers: {
+                                utilizationPerMemberPerYearPrimary: 0.01,
+                                utilizationPerMemberPerYearSpecialty: -0.01,
+                                utilizationPerMemberPerYearInpatient: -0.008,
+                                utilizationPerMemberPerYearDrugs: 0.07,
+                                providerDesiredCentsPerUtilizationSpecialty: 0.03,
+                                providerAutonomyFactor: -0.1,
+                                providerReportingBurden: 0.2,
+                                qualityOfLifeHighRisk: 0.25,
+                                readmissionRate: -0.05,
+                            }
+                        }
+                    ],
+                },
+                {
+                    id: 'launch-rewards-app',
+                    title: 'Launch Diabetes Management App',
+                    description: 'Our vendor offers a mobile app that rewards diabetes patients for keeping up with their medications, physical activity, and blood sugar checks. Should we roll it out to our members?',
+                    options: [
+                        {
+                            character: 'Quality Improvement Manager',
+                            description: 'This could be a great way to engage, educate, and empower patients to keep up with their care plan. The data from the app could also drive new care improvements.',
+                            imageUrl: 'assets/characters/character-4.png',
+                            modelChanges: {},
+                            inputModifiers: {
+                                qualityOfLifeMediumRisk: 0.004,
+                                providerReportingBurden: -0.01,
+                                providerTrustFactor: 0.03,
+                                wellManagedRate: 0.05,
+                                utilizationPerMemberPerYearDrugs: 0.05,
+
+                            }
+                        },
+                        {
+                            character: 'Social Worker',
+                            description: 'I worry that people will find the app confusing, record inaccurate measurements, or become demotivated in the future if rewards are no longer offered.',
+                            imageUrl: 'assets/characters/character-5.png',
+                            modelChanges: {},
+                            inputModifiers: {}
                         }
                     ],
                 },

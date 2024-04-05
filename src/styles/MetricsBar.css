@@ -142,3 +142,34 @@
     }
 
 }
+
+.focus-metric-group {
+    border: 1px solid var(--color-dark);
+    padding: 10px;
+    margin: 20px 10px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+}
+
+.focus-metric-group-name {
+    display: inline-block;
+    position: relative;
+    background: white;
+    color: var(--color-dark);
+    padding: 10px;
+    top: -30px;
+    font-size: 1em;
+    text-transform: uppercase;
+}
+
+.focus-metric-card {
+    margin: 10px;
+}
+
+.focus-metric-name {
+    font-size: 0.85em;
+}
+
+.focus-metric-group-name + .focus-metric-card {
+    margin-top: -30px;
+}

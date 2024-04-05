@@ -12,6 +12,8 @@ type SharedSavingsParams = PaymentModelParams & {
     providerSavingsRate: number
     providerLossRate: number
     providerStopLossCapCents?: number
+    fractionOfPopulationCovered?: number
+    fractionOfCostCovered?: number
     includedCategories: ServiceCategory[]
 }
 
@@ -25,6 +27,8 @@ export function getSimpleSharedSavingsModel({
     providerSavingsRate,
     providerLossRate,
     providerStopLossCapCents,
+    fractionOfPopulationCovered,
+    fractionOfCostCovered,
     includedCategories
 }: SharedSavingsParams): PaymentModel {
 
@@ -38,10 +42,14 @@ export function getSimpleSharedSavingsModel({
         const { memberCount } = vars
 
         // Calculate actual spend
-        const actualSpendCents = getActualSpend(vars, includedCategories)
+        const spendCents = getActualSpend(vars, includedCategories)
+        const costFraction = fractionOfCostCovered || 1
+        const actualSpendCents = costFraction * spendCents
 
         // Calculate target spend
-        const targetSpendCents = targetSpendCentsPerMemberPerYear * memberCount
+        const populationFraction = fractionOfPopulationCovered || 1
+        const members = populationFraction * memberCount
+        const targetSpendCents = targetSpendCentsPerMemberPerYear * members
 
         // Calculated savings or losses
         // If positive, savings; if negative, loss

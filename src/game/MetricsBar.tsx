@@ -1,9 +1,21 @@
 import React from 'react';
-import { Metric } from '../scenarios/scenario.tsx'
+import { Metric, MetricGroup } from '../scenarios/scenario.tsx'
 import '../styles/MetricsBar.css';
 
 type MetricsBarProps = {
     metrics: Metric[];
+};
+
+type FocusMetricProps = {
+    metric: Metric;
+};
+
+type FocusMetricGroupProps = {
+    group: MetricGroup;
+};
+
+type FocusMetricsProps = {
+    groups: MetricGroup[];
 };
 
 type Formatter = (value: any) => string;
@@ -11,7 +23,9 @@ type Formatter = (value: any) => string;
 enum FormatterId {
     CENTS_TO_DOLLARS = "cents_to_dollars",
     RATE = "rate",
-    HUNDRED_SCORE = "hundred_score"
+    HUNDRED_SCORE = "hundred_score",
+    NUMBER_COMMA = "number_comma",
+    PERCENTAGE = "percentage"
 };
 
 const CENTS_PER_DOLLAR = 100;
@@ -26,6 +40,11 @@ const DOLLARS_FORMATTER = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
 });
 
+const COMMA_FORMATTER = new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+});
+
 const DEFAULT_FORMATTER: Formatter = (value: any) => `${value}`;
 
 const FORMATTERS: Record<FormatterId, Formatter> = {
@@ -34,6 +53,10 @@ const FORMATTERS: Record<FormatterId, Formatter> = {
     ),
     rate: (value: number) => value.toFixed(2),
     hundred_score: (value: number) => (HUNDRED_SCORE * value).toFixed(1),
+    number_comma: (value: number) => COMMA_FORMATTER.format(value),
+    percentage: (value: number) => (
+        (FRACTION_TO_PERCENT * value).toFixed(1) + "%"
+    ),
 };
 
 function getPercentageChange(current: number, prior: number): number | null {
@@ -91,6 +114,62 @@ function getTrend(
     const trend = `${highEmoji}  ${amount}% ${direction}  ${goodEmoji}`;
     return trend;
 }
+
+const FocusMetricCard: React.FC<FocusMetricProps> = ({metric }) => {
+    const { name, formatId, higherIsBetter, value, priorValue } = metric
+    const format = FORMATTERS?.[formatId] || DEFAULT_FORMATTER;
+    const display = format(value);
+
+    const prior = priorValue !== undefined && format(priorValue);
+    const trend = getTrend(value, priorValue, higherIsBetter);
+    const isBetter = getIsBetter(value, priorValue, higherIsBetter);
+    const hasComparatorClass = (
+        priorValue !== undefined ? "has-comparator" : ""
+    );
+    const deltaClass = (
+        isBetter !== null && (isBetter ? "better" : "worse")
+    );
+
+    return (
+        <div className="focus-metric-card">
+            <h4 className="focus-metric-name">{name}</h4>
+            <p>{display}</p>
+            {priorValue !== undefined && (
+                <div className="comparator">
+                    {trend && (
+                        <div className={`delta ${deltaClass}`}>
+                            {trend}
+                        </div>
+                    )}
+                    <div className="prior">
+                        vs {prior} last year
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+};
+
+const FocusMetricGroup: React.FC<FocusMetricGroupProps> = ({ group }) => {
+    return (
+        <div className="focus-metric-group">
+            <h3 className="focus-metric-group-name">{group.name}</h3>
+            {group.metrics.map((metric) => (
+                <FocusMetricCard key={metric.variable} metric={metric} />
+            ))}
+        </div>
+    )
+};
+
+export const FocusMetrics: React.FC<FocusMetricsProps> = ({ groups }) => {
+    return (
+        <div className="focus-metric-container">
+            {groups.map((group) => (
+                <FocusMetricGroup key={group.name} group={group} />
+            ))}
+        </div>
+    )
+};
 
 export const MetricsBar: React.FC<MetricsBarProps> = ({ metrics }) => {
     return (

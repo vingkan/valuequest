@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/SlidingPane.css';
 
-export const SlidingPane: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
+export function SlidingPane({ children }) {
+    const [isOpen, setIsOpen] = useState(true);
   
     const togglePane = () => {
       setIsOpen(!isOpen);
@@ -14,8 +14,7 @@ export const SlidingPane: React.FC = () => {
           <div className="arrow"></div>
         </div>
         <div className="content">
-          {/* Your content here */}
-          <p>This is the pane content.</p>
+          {children}
         </div>
       </div>
     );
