@@ -583,7 +583,7 @@ If they go over the target, they split the losses with the plan.
             decisions: [
                 {
                     id: 'choose-episodes-model-condition',
-                    title: 'Choose Episode Condition',
+                    title: 'Choose an Episode Condition',
                     description: 'We can only focus on one condition for our pilot. Should we pick Chronic Obstructed Pulmonary Disease (COPD) or Diabetes Management? Unfortunately, the expert on each condition says we should pick the other.',
                     options: [
                         {
