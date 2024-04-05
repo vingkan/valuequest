@@ -45,9 +45,9 @@ const COMMA_FORMATTER = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 0,
 });
 
-const DEFAULT_FORMATTER: Formatter = (value: any) => `${value}`;
+export const DEFAULT_FORMATTER: Formatter = (value: any) => `${value}`;
 
-const FORMATTERS: Record<FormatterId, Formatter> = {
+export const FORMATTERS: Record<FormatterId, Formatter> = {
     cents_to_dollars: (value: number) => (
         DOLLARS_FORMATTER.format(value / CENTS_PER_DOLLAR)
     ),

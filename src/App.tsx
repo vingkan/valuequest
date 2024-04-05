@@ -15,6 +15,7 @@ import {
 import { Inputs, Variables } from './simulation/variables.tsx'
 import { simulate } from './simulation/main.tsx'
 import { PaymentModel } from './simulation/payment.tsx';
+import { FinalMetricsChart, FinalMetricsChartProps } from './game/MetricsChart.tsx';
 
 type AppProps = {
     game: Game
@@ -94,6 +95,8 @@ const App: React.FC<AppProps> = ({ game }) => {
     const [inputs, setInputs] = useState<Inputs>(game.initialInputs);
     const [models, setModels] = useState<PaymentModelMap>(game.initialModels);
     const [roundVars, setRoundVars] = useState<Record<number, Variables>>({});
+
+    const finalChartProps: FinalMetricsChartProps = { roundVars, metrics };
 
     function updateRoundResults(roundIndex: number, results: Variables, newModels: PaymentModelMap) {
         setModels(newModels);
@@ -207,9 +210,9 @@ const App: React.FC<AppProps> = ({ game }) => {
                 {roundIndex >= totalRounds && (
                     <div className="decision-presentation">
                         <div className="decision">
-                            <h3>The End</h3>
-                            <p>You made it through {totalRounds} contract years.</p>
+                            <h3>Final Scores</h3>
                             <p>Take a screenshot and post your scores!</p>
+                            <FinalMetricsChart {...finalChartProps} />
                         </div>
                     </div>
                 )}
