@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/SlidingPane.css';
 
 export function SlidingPane({ children }) {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
   
     const togglePane = () => {
       setIsOpen(!isOpen);

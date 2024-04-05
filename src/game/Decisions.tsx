@@ -124,12 +124,16 @@ export const DecisionPresentation: React.FC<DecisionPresentationProps> = ({
                                     : 'No Decision'
                             )
                             const emoji = (
-                                hasSelection ? (isYes ? '✅' : '❌') : '🤔'
+                                hasSelection ? (isYes ? '👍' : '👎') : '🤔'
                             )
                             const option = decision.options?.[decision?.selectedOptionIndex || 0] || {}
-                            const selected = option?.label || `${emoji} ${selection}`
+                            const selected = (
+                                option?.label
+                                    ? `✅ ${option.label}`
+                                    : `${emoji} ${selection}`
+                            )
                             return (
-                                <p key={index}>{selected}: {decision.title}</p>
+                                <p key={index}>{decision.title}: {selected}</p>
                             )
                         })}
                     </div>

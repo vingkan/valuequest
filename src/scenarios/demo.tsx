@@ -57,6 +57,12 @@ const copdEpisodesModel = getSimpleSharedSavingsModel({
     includedCategories: [ServiceCategory.Inpatient, ServiceCategory.Specialty],
 })
 
+const rewardsAppCareCoordinationModel = getCareCoordinationModel({
+    name: "Diabetes Rewards App Fee",
+    feePerMemberPerMonthCents: 10_00,
+    fractionOfPopulation: 0.0525
+})
+
 const initialCareCoordinationModel = getCareCoordinationModel({
     name: "Care Coordination Fee",
     feePerMemberPerMonthCents: 150_00,
@@ -161,7 +167,7 @@ export const DEMO_GAME: Game = {
                 {
                     name: "% of Population Low Risk",
                     variable: "memberRateLowRisk",
-                    higherIsBetter: false,
+                    higherIsBetter: true,
                     formatId: "percentage",
                     value: 0,
                 },
@@ -182,21 +188,21 @@ export const DEMO_GAME: Game = {
                 {
                     name: "Avg. Quality of Life Low Risk",
                     variable: "qualityOfLifeLowRisk",
-                    higherIsBetter: false,
+                    higherIsBetter: true,
                     formatId: "hundred_score",
                     value: 0,
                 },
                 {
                     name: "Avg. Quality of Life Med Risk",
                     variable: "qualityOfLifeMediumRisk",
-                    higherIsBetter: false,
+                    higherIsBetter: true,
                     formatId: "hundred_score",
                     value: 0,
                 },
                 {
                     name: "Avg. Quality of Life High Risk",
                     variable: "qualityOfLifeHighRisk",
-                    higherIsBetter: false,
+                    higherIsBetter: true,
                     formatId: "hundred_score",
                     value: 0,
                 },
@@ -275,6 +281,58 @@ export const DEMO_GAME: Game = {
                 },
             ],
         },
+        {
+            name: "Member Experience",
+            metrics: [
+                {
+                    name: "Trust in Providers",
+                    variable: "providerTrustFactor",
+                    higherIsBetter: true,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+                {
+                    name: "Concerns about Affordability",
+                    variable: "costAversionFactor",
+                    higherIsBetter: false,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+                {
+                    name: "Well-Managed Rate",
+                    variable: "wellManagedRate",
+                    higherIsBetter: true,
+                    formatId: "percentage",
+                    value: 0,
+                },
+            ],
+        },
+        {
+            name: "Provider Experience",
+            metrics: [
+                {
+                    name: "Level of Autonomy",
+                    variable: "providerAutonomyFactor",
+                    higherIsBetter: true,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+                {
+                    name: "Reporting Burden",
+                    variable: "providerReportingBurden",
+                    higherIsBetter: false,
+                    formatId: "hundred_score",
+                    value: 0,
+                },
+                {
+                    name: "Reimbursement Ratio",
+                    variable: "desiredReimbursementRatio",
+                    higherIsBetter: true,
+                    formatId: "rate",
+                    value: 0,
+                },
+            ],
+        },
     ],
     initialInputs: {
         // Cost and Utilization Factors
@@ -301,8 +359,8 @@ export const DEMO_GAME: Game = {
         genericDrugCostDiscountFactor: 0.5,
         // Quality Factors
         // Higher is Better
-        careAccessibilityFactor: 0.75,
-        providerTrustFactor: 0.75,
+        careAccessibilityFactor: 0.5,
+        providerTrustFactor: 0.5,
         primaryCareParticipationRate: 0.83,
         preventionRate: 0.15,
         conditionsManagedRate: 0.65,
@@ -426,6 +484,7 @@ Navigate these decisions to get ready for contract year 2024.
                 description: `
 You made it through your first year!
 Some of the data was delayed, but you got through it.
+Check the metrics at the top and right side for the impact of your decisions.
 Now it's time to prepare for contract year 2025.
                 `,
             },
@@ -466,14 +525,15 @@ Now it's time to prepare for contract year 2025.
                     ],
                 },
                 {
-                    id: 'use-prior-year-benchmarks',
-                    title: 'Use Prior Year Benchmarks',
+                    id: 'choose-benchmarks',
+                    title: 'Choose Benchmarks',
                     description: 'Currently, providers have to do better than the regional average to get their performance bonuses. Providers complain about that, so we are considering benchmarking against their previous year\'s performance instead. They don\'t love that either.',
                     options: [
                         {
                             character: 'Medical Director',
                             description: 'Regional benchmarks feel unfair because you are going up against providers with much more resources. Competing with yourself from last year will be an easier sell.',
                             imageUrl: 'assets/characters/character-11.png',
+                            label: 'Prior Year',
                             modelChanges: {
                                 wellness: getAnnualWellnessVisitIncentive({
                                     minimumThreshold: 0.90,
@@ -495,6 +555,7 @@ Now it's time to prepare for contract year 2025.
                             character: 'Health Economist',
                             description: 'We can adjust the regional benchmarks to consider only "peer" providers who are similar in size. But, adjusting for year-over-year changes could expose us to much more risk.',
                             imageUrl: 'assets/characters/character-10.png',
+                            label: 'Regional Peers',
                             modelChanges: {},
                             inputModifiers: {
                                 primaryCareParticipationRate: 0.05,
@@ -522,7 +583,7 @@ If they go over the target, they split the losses with the plan.
             decisions: [
                 {
                     id: 'choose-episodes-model-condition',
-                    title: 'Choose Condition for Episodes of Care Model',
+                    title: 'Choose Episode Condition',
                     description: 'We can only focus on one condition for our pilot. Should we pick Chronic Obstructed Pulmonary Disease (COPD) or Diabetes Management? Unfortunately, the expert on each condition says we should pick the other.',
                     options: [
                         {
@@ -583,14 +644,15 @@ If they go over the target, they split the losses with the plan.
                             character: 'Quality Improvement Manager',
                             description: 'This could be a great way to engage, educate, and empower patients to keep up with their care plan. The data from the app could also drive new care improvements.',
                             imageUrl: 'assets/characters/character-4.png',
-                            modelChanges: {},
+                            modelChanges: {
+                                rewards: rewardsAppCareCoordinationModel,
+                            },
                             inputModifiers: {
                                 qualityOfLifeMediumRisk: 0.004,
                                 providerReportingBurden: -0.01,
                                 providerTrustFactor: 0.03,
                                 wellManagedRate: 0.05,
                                 utilizationPerMemberPerYearDrugs: 0.05,
-
                             }
                         },
                         {

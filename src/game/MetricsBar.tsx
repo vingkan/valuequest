@@ -129,22 +129,19 @@ const FocusMetricCard: React.FC<FocusMetricProps> = ({metric }) => {
     const deltaClass = (
         isBetter !== null && (isBetter ? "better" : "worse")
     );
+    const hasChange = trend !== "no change"
 
     return (
         <div className="focus-metric-card">
             <h4 className="focus-metric-name">{name}</h4>
-            <p>{display}</p>
+            <p>
+                <span className="focus-metric-value">{display} </span>
+                <span className="comparator">{trend && <span className={`delta ${deltaClass}`}>{trend}</span>}</span>
+            </p>
             {priorValue !== undefined && (
-                <div className="comparator">
-                    {trend && (
-                        <div className={`delta ${deltaClass}`}>
-                            {trend}
-                        </div>
-                    )}
-                    <div className="prior">
-                        vs {prior} last year
-                    </div>
-                </div>
+                <p className="comparator">
+                    {hasChange && <span className="prior"> vs {prior} last year</span>}
+                </p>
             )}
         </div>
     )

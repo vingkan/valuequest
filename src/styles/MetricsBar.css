@@ -108,11 +108,11 @@
     font-size: 0.7em;
 }
 
-.metric .comparator .delta.better {
+.comparator .delta.better {
     color: var(--color-better);
 }
 
-.metric .comparator .delta.worse {
+.comparator .delta.worse {
     color: var(--color-worse);
 }
 
@@ -162,6 +162,10 @@
     text-transform: uppercase;
 }
 
+.focus-metric-group-name + .focus-metric-card {
+    margin-top: -30px;
+}
+
 .focus-metric-card {
     margin: 10px;
 }
@@ -170,6 +174,11 @@
     font-size: 0.85em;
 }
 
-.focus-metric-group-name + .focus-metric-card {
-    margin-top: -30px;
+.focus-metric-value {
+    font-size: 1.3em;
+    line-height: 1.5em;
+}
+
+.focus-metric-card .comparator {
+    font-size: 0.85em;
 }

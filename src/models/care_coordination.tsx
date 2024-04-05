@@ -9,6 +9,7 @@ const MONTHS_PER_YEAR = 12
 
 type CareCoordinationParams = PaymentModelParams & {
     feePerMemberPerMonthCents: number
+    fractionOfPopulation?: number
 }
 
 type CareCoordinationInputs = Partial<Variables> & {
@@ -17,13 +18,16 @@ type CareCoordinationInputs = Partial<Variables> & {
 
 export function getCareCoordinationModel({
     name,
-    feePerMemberPerMonthCents
+    feePerMemberPerMonthCents,
+    fractionOfPopulation,
 }: CareCoordinationParams): PaymentModel {
 
     function run(vars: CareCoordinationInputs): PaymentModelOutput {
         const { memberCount = 0 } = vars
         const pmpy = MONTHS_PER_YEAR * feePerMemberPerMonthCents
-        const paymentCents = pmpy * memberCount
+        const populationFraction = fractionOfPopulation || 1
+        const members = populationFraction * memberCount
+        const paymentCents = pmpy * members
         return { paymentCents, name }
     }
 

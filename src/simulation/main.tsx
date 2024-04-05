@@ -149,6 +149,10 @@ export function simulate(
     const breakdown = getPaymentBreakdown(payments, memberCount)
     if (debug) console.log(breakdown)
 
+    const desiredReimbursementRatio = (
+        actualReimbursementCents / desiredReimbursementCents
+    )
+
     // Calculate quintuple aim outputs
     const memberSatisfaction = getMemberSatisfaction({
         ...inputs,
@@ -188,6 +192,7 @@ export function simulate(
         ...costCentsByCategory,
         desiredReimbursementCents,
         actualReimbursementCents,
+        desiredReimbursementRatio,
         memberSatisfaction,
         qualityOfLife,
         incurredPrimaryPmpm,

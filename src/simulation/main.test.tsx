@@ -60,6 +60,7 @@ test('run simulation with no payment models', () => {
         incurredDrugsPmpm: 0,
         desiredReimbursementCents: 240000,
         actualReimbursementCents: 0,
+        desiredReimbursementRatio: 0,
         // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall
         memberSatisfaction: 0.75,
         // Zero reimbursement, but other factors are perfect -> 0.5 overall
@@ -138,6 +139,7 @@ test('run simulation with one simple payment model', () => {
         incurredDrugsPmpm: 0,
         desiredReimbursementCents: 240000,
         actualReimbursementCents: 120000,
+        desiredReimbursementRatio: 0.5,
         // Three of the six factors are 0.5, the other three are 1.0 -> 0.75 overall
         memberSatisfaction: 0.75,
         // Half reimbursement and other factors are perfect -> 0.75 overall

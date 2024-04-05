@@ -35,13 +35,15 @@ type SimulateRoundProps = {
     previousModels: PaymentModelMap;
     round: Round;
     decisions: Decision[];
+    debug: boolean;
 };
 
-function simulateRound({
+export function simulateRound({
     inputs,
     previousModels,
     round,
     decisions,
+    debug,
 }: SimulateRoundProps) {
     const selectedOptions = decisions.map((decision) => (
         decision.options?.[decision.selectedOptionIndex!]
@@ -82,8 +84,8 @@ function simulateRound({
         modifiedInputs[key] = modifiedInputs[key] * factor
     });
 
-    const results = simulate(modifiedInputs, modifiedModels, true);
-    return results;
+    const results = simulate(modifiedInputs, modifiedModels, debug);
+    return { results, newModels: combinedModelChanges };
 }
 
 const App: React.FC<AppProps> = ({ game }) => {
@@ -93,7 +95,8 @@ const App: React.FC<AppProps> = ({ game }) => {
     const [models, setModels] = useState<PaymentModelMap>(game.initialModels);
     const [roundVars, setRoundVars] = useState<Record<number, Variables>>({});
 
-    function updateRoundResults(roundIndex: number, results: Variables) {
+    function updateRoundResults(roundIndex: number, results: Variables, newModels: PaymentModelMap) {
+        setModels(newModels);
         setInputs((previousInputs) => {
             const newInputs = (
                 Object
@@ -145,7 +148,7 @@ const App: React.FC<AppProps> = ({ game }) => {
             true
         );
         console.log(results);
-        updateRoundResults(-1, results);
+        updateRoundResults(-1, results, game.initialModels);
     }, [game]);
 
     // Additional state for managing decisions might be needed
@@ -170,14 +173,15 @@ const App: React.FC<AppProps> = ({ game }) => {
 
     const handleLockDecisions = () => {
         console.log(`Simulate Round ${roundIndex + 1}`);
-        const results = simulateRound({
+        const { results, newModels } = simulateRound({
             inputs,
             previousModels: models,
             round,
             decisions,
+            debug: true,
         })
         console.log(results);
-        updateRoundResults(roundIndex, results);
+        updateRoundResults(roundIndex, results, newModels);
         setRoundIndex(roundIndex + 1);
     };
 
@@ -204,7 +208,8 @@ const App: React.FC<AppProps> = ({ game }) => {
                     <div className="decision-presentation">
                         <div className="decision">
                             <h3>The End</h3>
-                            <p>Leaderboard coming soon...</p>
+                            <p>You made it through {totalRounds} contract years.</p>
+                            <p>Take a screenshot and post your scores!</p>
                         </div>
                     </div>
                 )}
